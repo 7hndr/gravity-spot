@@ -1,0 +1,60 @@
+.inputWrapper {
+	position: relative;
+	display: grid;
+	grid-gap: 0.25rem;
+}
+// TODO: remove styled
+.styledLabel {
+	color: var(--text);
+	font-size: 1rem;
+
+	&:empty {
+		display: none;
+	}
+}
+
+.styledInput {
+	color: var(--text);
+	display: grid;
+	align-items: center;
+	border: none;
+	border-radius: var(--border-radius);
+	padding: 0.75rem 1.75rem 0.75rem 1rem;
+	background-color: var(--field);
+	font-size: 1rem;
+	height: 2.5rem;
+	width: 100%;
+	position: relative;
+
+	&:focus {
+		outline: 3px solid var(--accent);
+		outline-offset: -3px;
+	}
+}
+
+.inputCleaner {
+	position: absolute;
+	right: 0.5rem;
+	transform: translateY(50%);
+	bottom: 1.25rem;
+	width: 1rem;
+	height: 1rem;
+	display: grid;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	color: var(--secondary-text);
+	padding: 0;
+	border: none;
+	background-color: transparent;
+	transition: color 0.2s ease;
+
+	&:hover {
+		color: var(--accent);
+	}
+}
+
+.errorBlock {
+	color: var(--error-text);
+	font-size: 1rem;
+}

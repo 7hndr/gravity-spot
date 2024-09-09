@@ -1,0 +1,10 @@
+.Divider {
+	display: grid;
+	border-bottom: 1px solid var(--primary-text);
+}
+
+.vertical {
+	height: 100%;
+	border-right: 1px solid var(--primary-text);
+	border-bottom: none;
+}

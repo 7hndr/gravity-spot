@@ -1,0 +1,35 @@
+.dark-theme {
+	--bg: #242424;
+	--text: #bcbcbc;
+	--secondary-text: #dbdbdb50;
+	--primary: #4d8ba3;
+	--secondary: #372857;
+	--accent: #6d3a7e;
+	// --field: #43368105;
+	--field: #9999994f;
+	--surface: #86cac607;
+	--error-text: #ad364acf;
+}
+
+.light-theme {
+	--bg: #dbdbdb;
+	--text: #242424;
+	--secondary-text: #24242450;
+	--primary: #5c9ab2;
+	--secondary: #b7a8d7;
+	--accent: #b481c5;
+	// --field: #8a7ec905;
+	--field: #9999994f;
+	--surface: #86cac620;
+	--error-text: #9a273ae3;
+}
+
+:root {
+	--border-radius: 0.5rem;
+	--padding: 1rem;
+	--gap: 1rem;
+	--white: #ffffff;
+	--black: #000000;
+	--font: 'Inter', sans-serif;
+	--secondary-font: 'Merriweather', serif;
+}
