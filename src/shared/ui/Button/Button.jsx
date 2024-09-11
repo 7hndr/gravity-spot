@@ -37,7 +37,7 @@ Button.propTypes = {
 	children: PropTypes.node,
 	loading: PropTypes.bool,
 	disabled: PropTypes.bool,
-	onClick: PropTypes.func.isRequired,
+	onClick: PropTypes.func,
 	simple: PropTypes.bool,
 	square: PropTypes.bool,
 	active: PropTypes.bool,

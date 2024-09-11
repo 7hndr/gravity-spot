@@ -1,14 +1,14 @@
 import { Outlet } from 'react-router-dom'
 import styles from './Root.module.scss'
-import { Sidebar, Header } from '../index'
+import { Sidebar } from '../'
 
 export const Root = () => {
 	return (
 		<>
 			<div className={styles.root}>
-				<div className={styles.header}>
+				{/* <div className={styles.header}>
 					<Header />
-				</div>
+				</div> */}
 				<div className={styles.sidebar}>
 					<Sidebar />
 				</div>

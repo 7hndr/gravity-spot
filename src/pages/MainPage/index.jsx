@@ -1,5 +1,5 @@
-// import { Title } from '../../shared/ui'
-import { Map } from '../../features/mapgl'
+// import { Title } from '@/shared/ui'
+import { Map } from '@/features/mapgl'
 
 export const MainPage = () => {
 	return (

@@ -1,6 +1,6 @@
 import styles from './Header.module.scss'
-import { Switch } from '../../ui'
-import { useTheme } from '../../hooks/useTheme'
+import { Switch } from '@/shared/ui'
+import { useTheme } from '@/shared/hooks/useTheme'
 
 export const Header = () => {
 	const { isDark, toggleTheme } = useTheme()

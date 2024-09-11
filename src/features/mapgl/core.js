@@ -3,8 +3,8 @@ import mapboxgl from 'mapbox-gl'
 const VITE_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN
 
 const themeStylesConfig = {
-	light: 'mapbox://styles/mapbox/navigation-day-v1',
-	dark: 'mapbox://styles/mapbox/navigation-night-v1',
+	light: 'mapbox://styles/mapbox/light-v11',
+	dark: 'mapbox://styles/thndr-/cm0wy94nv00y901pbdmdj3f24',
 	spare: `https://api.mapbox.com/styles/v1/mapbox/cj3kbeqzo00022smj7akz3o1e?access_token=${VITE_MAPBOX_TOKEN}`
 }
 
@@ -13,7 +13,7 @@ export class MapController {
 		this.theme = theme
 		this.container = container
 		this.initCoords = initCoords
-
+		this.updateTheme = this.updateTheme.bind(this)
 		this.mapgl = null
 	}
 
@@ -36,5 +36,9 @@ export class MapController {
 		return this.mapgl
 	}
 
-	flyTo = (...args) => this.mapgl.flyTo(...args)
+	updateTheme(theme) {
+		this.mapgl.setStyle(themeStylesConfig[theme] ?? themeStylesConfig.spare)
+	}
+
+	// flyTo = (...args) => this.mapgl.flyTo(...args)
 }

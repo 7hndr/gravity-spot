@@ -1,26 +1,25 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { MapController } from './core'
-import { useTheme } from '../../shared/hooks/useTheme'
+import { useTheme } from '@/shared/hooks/useTheme'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import styles from './Mapgl.module.scss'
-
 const DEFAULT_COORDS = [-74.0, 40.738]
 
 export const Map = () => {
 	const { isDark } = useTheme()
+	const mapController = useRef(null)
 
-	const callback = useCallback(async () => {
+	const initMap = useCallback(async () => {
 		new Promise(resolve => {
 			if ('geolocation' in navigator) {
 				const geolocationTimeout = setTimeout(() => {
 					console.warn('Geolocation request timed out')
 					resolve(DEFAULT_COORDS)
 				}, 1024)
-
 				navigator.geolocation.getCurrentPosition(
 					({ coords: { latitude: lat, longitude: lon } }) => {
 						clearTimeout(geolocationTimeout)
-						resolve({ lat, lon })
+						resolve([lon, lat])
 					},
 					() => {
 						console.warn('Geolocation blocked')
@@ -32,22 +31,26 @@ export const Map = () => {
 				resolve(DEFAULT_COORDS)
 			}
 		}).then(initCoords => {
-			const controller = new MapController({
-				container: 'map',
-				theme: isDark ? 'dark' : 'light',
-				initCoords
-			}).init()
-
+			if (!mapController.current) {
+				mapController.current = new MapController({
+					container: 'map',
+					theme: isDark ? 'dark' : 'light',
+					initCoords
+				})
+				mapController.current.init()
+			} else {
+				mapController.current.updateTheme(isDark ? 'dark' : 'light')
+			}
 			if (
 				initCoords[0] === DEFAULT_COORDS[0] &&
 				initCoords[1] === DEFAULT_COORDS[1]
 			) {
 				navigator.geolocation.getCurrentPosition(
 					({ coords: { latitude: lat, longitude: lon } }) => {
-						controller.flyTo({
+						mapController.current.flyTo({
 							speed: 3,
-							center: { lat, lon },
-							essntial: true
+							center: [lon, lat],
+							essential: true
 						})
 					}
 				)
@@ -55,7 +58,9 @@ export const Map = () => {
 		})
 	}, [isDark])
 
-	useEffect(() => callback, [callback, isDark])
+	useEffect(() => {
+		initMap()
+	}, [initMap])
 
 	return (
 		<div

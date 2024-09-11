@@ -1,26 +1,26 @@
 .dark-theme {
-	--bg: #242424;
+	--bg: #16171d;
 	--text: #bcbcbc;
 	--secondary-text: #dbdbdb50;
 	--primary: #4d8ba3;
 	--secondary: #372857;
-	--accent: #6d3a7e;
+	--accent: #785e9b;
 	// --field: #43368105;
-	--field: #9999994f;
-	--surface: #86cac607;
+	--field: #282a35;
+	--surface: #27282d;
 	--error-text: #ad364acf;
 }
 
 .light-theme {
 	--bg: #dbdbdb;
-	--text: #242424;
+	--text: #16171d;
 	--secondary-text: #24242450;
 	--primary: #5c9ab2;
 	--secondary: #b7a8d7;
-	--accent: #b481c5;
+	--accent: #9b81c5;
 	// --field: #8a7ec905;
-	--field: #9999994f;
-	--surface: #86cac620;
+	--field: #d9d4dd;
+	--surface: #efefef;
 	--error-text: #9a273ae3;
 }
 

@@ -1,4 +1,5 @@
 export * from './Pagination/Pagination'
+export * from './Dropdown/Dropdown'
 export * from './Divider/Divider'
 export * from './Switch/Switch'
 export * from './Button/Button'

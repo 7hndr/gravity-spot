@@ -1,6 +1,20 @@
 .sidebar {
 	padding: 1rem;
 	justify-content: center;
+	height: 100%;
 	display: grid;
-	align-items: end;
+	align-content: space-between;
+	grid-gap: 1rem;
+}
+
+.sidebarTop {
+	display: grid;
+	grid-gap: 1rem;
+	justify-items: center;
+}
+
+.sidebarBottom {
+	display: grid;
+	grid-gap: 2rem;
+	justify-items: center;
 }

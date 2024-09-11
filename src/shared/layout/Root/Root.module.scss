@@ -1,13 +1,13 @@
 .root {
-	--sidebar-width: 4.25rem;
+	--sidebar-width: 5rem;
 
 	display: grid;
 	height: 100vh;
 	overflow: hidden;
 	background-color: var(--bg);
-	grid-template-rows: 2.5rem auto;
+	// grid-template-rows: 2.5rem auto;
 	grid-template-columns: var(--sidebar-width) auto;
-	grid-template-areas: 'header header' 'sidebar content';
+	grid-template-areas: 'sidebar content';
 }
 
 .content {
@@ -17,21 +17,22 @@
 	z-index: 1;
 }
 
-.header {
-	z-index: 11;
-	display: grid;
-	overflow: hidden;
-	grid-area: header;
-	margin-left: calc(var(--sidebar-width) - 2px);
-	border-bottom: 2px solid var(--field);
-	background: var(--bg);
-}
+// .header {
+// 	z-index: 11;
+// 	display: grid;
+// 	overflow: hidden;
+// 	grid-area: header;
+// 	margin-left: calc(var(--sidebar-width) - 2px);
+// 	border-bottom: 2px solid var(--field);
+// 	background: var(--bg);
+// }
 
 .sidebar {
 	z-index: 2;
 	background: var(--bg);
 	grid-area: sidebar;
 	display: grid;
+	align-items: end;
 	height: 100%;
 	overflow: hidden;
 	border-right: 2px solid var(--field);

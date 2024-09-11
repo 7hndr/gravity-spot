@@ -1,5 +1,5 @@
-import { useTheme } from '../../shared/hooks/useTheme'
-import { Button, Text, Title, Block, Icon, Input } from '../../shared/ui'
+import { useTheme } from '@/shared/hooks/useTheme'
+import { Button, Text, Title, Block, Icon, Input } from '@/shared/ui'
 import styles from './ServicePage.module.scss'
 
 export const ServicePage = () => {

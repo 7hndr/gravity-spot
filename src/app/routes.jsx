@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom'
 
-import { Root } from '../shared/layout'
-import { MainPage, NotFoundPage, EntryPage, ServicePage } from '../pages'
+import { Root } from '@/shared/layout'
+import { MainPage, NotFoundPage, EntryPage, ServicePage } from '@/pages'
 
 export const routeList = [
 	{
