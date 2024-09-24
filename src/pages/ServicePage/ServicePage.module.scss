@@ -1,9 +1,10 @@
 .wrapper {
 	--color-block-size: 4rem;
-
+	overflow: hidden;
 	display: grid;
 	align-content: start;
 	justify-content: start;
+	height: 100%;
 }
 
 .colorList {

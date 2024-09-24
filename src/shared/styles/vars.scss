@@ -7,8 +7,10 @@
 	--accent: #785e9b;
 	// --field: #43368105;
 	--field: #282a35;
-	--surface: #27282d;
+	--surface: #242734;
 	--error-text: #ad364acf;
+	--warning-text: #c7771be3;
+	--success-text: #138134;
 }
 
 .light-theme {
@@ -22,6 +24,8 @@
 	--field: #d9d4dd;
 	--surface: #efefef;
 	--error-text: #9a273ae3;
+	--warning-text: #c7771be3;
+	--success-text: #138134;
 }
 
 :root {

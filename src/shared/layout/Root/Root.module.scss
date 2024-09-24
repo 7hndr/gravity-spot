@@ -1,13 +1,14 @@
 .root {
 	--sidebar-width: 5rem;
+	--card-width: 24rem;
 
 	display: grid;
 	height: 100vh;
 	overflow: hidden;
 	background-color: var(--bg);
 	// grid-template-rows: 2.5rem auto;
-	grid-template-columns: var(--sidebar-width) auto;
-	grid-template-areas: 'sidebar content';
+	grid-template-columns: var(--sidebar-width) var(--card-width) auto;
+	grid-template-areas: 'sidebar card content';
 }
 
 .content {
@@ -16,16 +17,6 @@
 	overflow: hidden;
 	z-index: 1;
 }
-
-// .header {
-// 	z-index: 11;
-// 	display: grid;
-// 	overflow: hidden;
-// 	grid-area: header;
-// 	margin-left: calc(var(--sidebar-width) - 2px);
-// 	border-bottom: 2px solid var(--field);
-// 	background: var(--bg);
-// }
 
 .sidebar {
 	z-index: 2;

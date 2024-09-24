@@ -26,6 +26,7 @@ export const Button = ({
 			onClick={onClick}
 			title={title}
 			disabled={disabled}
+			inert={String(disabled || loading)}
 		>
 			{!loading && children}
 		</button>

@@ -1,0 +1,11 @@
+.notificationWrapper {
+	position: fixed;
+	top: 1rem;
+	right: 1rem;
+	color: white;
+	z-index: 1000;
+	max-width: 300px;
+	display: grid;
+	grid-gap: 1rem;
+	transition: all 0.13s ease;
+}

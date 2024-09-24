@@ -1,0 +1,49 @@
+.notificationBody {
+	padding: 1rem;
+	border-radius: var(--border-radius);
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	display: grid;
+	grid-gap: 0.5rem;
+	z-index: 1000;
+	max-width: 300px;
+	display: grid;
+	background-color: var(--surface);
+	opacity: 0;
+	transform: translateY(42px);
+	transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.notificationBody.show {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.notificationBody.hide {
+	opacity: 0;
+	transform: translateY(-42px);
+	transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.title {
+	font-weight: bold;
+
+	&.default {
+		color: var(--text);
+	}
+
+	&.success {
+		color: var(--success-text);
+	}
+
+	&.error {
+		color: var(--error-text);
+	}
+
+	&.warning {
+		color: var(--warning-text);
+	}
+}
+
+.message {
+	color: var(--text);
+}

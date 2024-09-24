@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import styles from './Switch.module.scss'
+import { Text } from '..'
 
-// eslint-disable-next-line react/prop-types
 export const Switch = ({ onChange, checked, label }) => {
 	const [isChecked, setIsChecked] = useState(checked || false)
 
@@ -23,12 +23,12 @@ export const Switch = ({ onChange, checked, label }) => {
 				<span className={`${styles.slider} ${styles.round}`} />
 			</label>
 			{label && (
-				<span
+				<Text
 					className={styles.label}
 					onClick={handleChange}
 				>
 					{label}
-				</span>
+				</Text>
 			)}
 		</div>
 	)

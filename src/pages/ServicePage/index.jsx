@@ -1,9 +1,11 @@
 import { useTheme } from '@/shared/hooks/useTheme'
 import { Button, Text, Title, Block, Icon, Input } from '@/shared/ui'
 import styles from './ServicePage.module.scss'
+import { useNotification } from '@/shared/hooks/useNotify'
 
 export const ServicePage = () => {
 	const { isDark, toggleTheme } = useTheme()
+	const sendNotify = useNotification()
 
 	const colorVars = [
 		'bg',
@@ -18,7 +20,16 @@ export const ServicePage = () => {
 
 	return (
 		<div className={styles.wrapper}>
-			<Block col>
+			<div
+				style={{
+					display: 'grid',
+					gridGap: '1rem',
+					padding: '1rem',
+					gridTemplateColumns: '1fr 1fr',
+					overflow: 'auto',
+					height: '100%'
+				}}
+			>
 				<Block>
 					<Title>Buttons</Title>
 					<Block
@@ -27,9 +38,11 @@ export const ServicePage = () => {
 						width={256}
 					>
 						<Button
-							onClick={() => {}}
+							onClick={() => {
+								console.log(1)
+							}}
 							loading
-						/>{' '}
+						/>
 						<Text>Loading</Text>
 					</Block>
 					<Block
@@ -38,11 +51,13 @@ export const ServicePage = () => {
 						width={256}
 					>
 						<Button
-							onClick={() => {}}
+							onClick={() => {
+								console.log(1)
+							}}
 							disabled
 						>
 							Disabled
-						</Button>{' '}
+						</Button>
 						<Text>Disabled</Text>
 					</Block>
 					<Block
@@ -55,7 +70,7 @@ export const ServicePage = () => {
 							simple
 						>
 							Simple
-						</Button>{' '}
+						</Button>
 						<Text>Simple</Text>
 					</Block>
 					<Block
@@ -68,7 +83,7 @@ export const ServicePage = () => {
 							square
 						>
 							1
-						</Button>{' '}
+						</Button>
 						<Text>Square</Text>
 					</Block>
 					<Block
@@ -81,8 +96,28 @@ export const ServicePage = () => {
 							active
 						>
 							active
-						</Button>{' '}
+						</Button>
 						<Text>Active</Text>
+					</Block>
+					<Block
+						aic
+						col
+						type='error'
+						width={256}
+					>
+						<Button
+							onClick={() => {
+								sendNotify({
+									message: 'This is a notify!',
+									title: 'Warning',
+									type: 'warning',
+									duration: 2048
+								})
+							}}
+						>
+							notify
+						</Button>
+						<Text>notify</Text>
 					</Block>
 				</Block>
 				<Block width={320}>
@@ -149,7 +184,7 @@ export const ServicePage = () => {
 						/>
 					</Block>
 				</Block>
-			</Block>
+			</div>
 		</div>
 	)
 }
