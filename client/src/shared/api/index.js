@@ -1,6 +1,6 @@
 export const GET = url => {
 	return new Promise((resolve, reject) => {
-		fetch(`http://localhost:666/api/${url}`, { method: 'GET' })
+		fetch(`/api/${url}`, { method: 'GET' })
 			.then(res => {
 				if (res.ok) {
 					resolve(res.json())
