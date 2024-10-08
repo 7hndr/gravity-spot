@@ -4,10 +4,18 @@ import mongoose from 'mongoose'
 import spotRoutes from './routes/spots/index.js'
 import schemasRoutes from './routes/schemas/index.js'
 
-const PORT = 666
 const app = express()
+const PORT = 666
+const allowedOrigins = ['http://212.67.12.167', 'http://localhost:6666']
 
-app.use(cors())
+app.use(
+  cors({
+    origin: allowedOrigins,
+    // methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    // allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+  })
+)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
