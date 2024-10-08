@@ -6,7 +6,12 @@ import schemasRoutes from './routes/schemas/index.js'
 
 const app = express()
 const PORT = 666
-const allowedOrigins = ['http://212.67.12.167', 'http://localhost:6666']
+const allowedOrigins = [
+  'http://212.67.12.167',
+  'http://localhost:6666',
+  'e-grom.com',
+  'www.e-grom.com'
+]
 
 app.use(
   cors({

@@ -4,6 +4,13 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+	css: {
+		preprocessorOptions: {
+			scss: {
+				api: 'modern-compiler' // or "modern"
+			}
+		}
+	},
 	resolve: {
 		alias: [
 			// eslint-disable-next-line no-undef
