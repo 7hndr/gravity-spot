@@ -1,21 +1,26 @@
 import { StrictMode } from 'react'
-import { Provider } from 'react-redux'
 import { createRoot } from 'react-dom/client'
-import { NotificationProvider } from '@/features/notifications/NotificationProvider'
-import { ThemeProvider } from '@/features/theme/ThemeProvider'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-import App from './App'
-import { store } from './store'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+import { NotificationProvider } from '@/features/notifications/NotificationProvider'
+import { ThemeProvider } from '@/shared/theme/ThemeProvider'
+import { routeList } from './routes.jsx'
+
 import '@/shared/styles/index.scss'
+
+const router = createBrowserRouter(routeList)
+const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')).render(
 	<StrictMode>
-		<Provider store={store}>
-			<ThemeProvider>
-				<NotificationProvider>
-					<App />
-				</NotificationProvider>
-			</ThemeProvider>
-		</Provider>
+		<ThemeProvider>
+			<NotificationProvider>
+				<QueryClientProvider client={queryClient}>
+					<RouterProvider router={router} />
+				</QueryClientProvider>
+			</NotificationProvider>
+		</ThemeProvider>
 	</StrictMode>
 )

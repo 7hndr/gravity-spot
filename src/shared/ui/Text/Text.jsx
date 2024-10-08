@@ -5,14 +5,16 @@ export const Text = ({
 	children,
 	size = 1,
 	type = 'primary',
+	className = '',
 	weight = 400
 }) => {
-	const classNames = [styles.text, styles[type]].join(' ')
+	const classNames = [styles.text, styles[type], className].join(' ')
 
 	return (
 		<span
 			className={classNames}
 			style={{ fontSize: `${size}rem`, fontWeight: weight }}
+			title={children}
 		>
 			{children}
 		</span>

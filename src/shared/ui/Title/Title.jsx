@@ -5,23 +5,27 @@ export const Title = ({
 	children,
 	size = 'h1',
 	type = 'primary',
+	className = '',
 	center = false,
 	uppercase = false,
 	letterSpacing = '0',
-	weight = 300
+	weight = null
 }) => {
 	const typeClass = styles[type] || ''
 	const sizeClass = styles[size] || ''
 	const centerClass = center ? styles.center : ''
 	const uppercaseClass = uppercase ? styles.uppercase : ''
 
+	const Tag = size
+
 	return (
-		<h1
-			className={`${styles.title} ${typeClass} ${sizeClass} ${centerClass} ${uppercaseClass}`}
+		<Tag
+			className={`${styles.title} ${typeClass} ${sizeClass} ${centerClass} ${uppercaseClass} ${className}`}
 			style={{ letterSpacing, fontWeight: weight }}
+			title={children}
 		>
 			{children}
-		</h1>
+		</Tag>
 	)
 }
 

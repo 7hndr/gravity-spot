@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 import { useState, useRef, forwardRef } from 'react'
 import styles from './Input.module.scss'
+import { Icon } from '..'
 
 export const Input = forwardRef(
 	({ label, className, error, onChange, setFocus, ...otherProps }, ref) => {
@@ -13,6 +14,7 @@ export const Input = forwardRef(
 			setInputValue('')
 
 			if (ref && setFocus) setFocus(otherProps.name)
+
 			if (internalRef.current) internalRef.current.focus()
 
 			if (onChange) {
@@ -24,6 +26,7 @@ export const Input = forwardRef(
 
 		const handleChange = event => {
 			setInputValue(event.target.value)
+
 			if (onChange) {
 				onChange(event)
 			}
@@ -53,7 +56,7 @@ export const Input = forwardRef(
 							className={styles.inputCleaner}
 							tabIndex='-1'
 						>
-							x
+							<Icon name='xmark' />
 						</button>
 					)}
 				</div>

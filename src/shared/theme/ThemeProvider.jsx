@@ -1,10 +1,11 @@
-import { createContext, useState } from 'react'
+import { useState, createContext } from 'react'
 
 export const ThemeContext = createContext()
 
 export const ThemeProvider = ({ children }) => {
 	const [isDark, setIsDark] = useState(() => {
 		const savedTheme = localStorage.getItem('theme')
+
 		return savedTheme ? JSON.parse(savedTheme) : false
 	})
 
@@ -12,6 +13,7 @@ export const ThemeProvider = ({ children }) => {
 		setIsDark(prevIsDark => {
 			const newIsDark = !prevIsDark
 			localStorage.setItem('theme', JSON.stringify(newIsDark))
+
 			return newIsDark
 		})
 	}

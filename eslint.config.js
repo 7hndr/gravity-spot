@@ -24,6 +24,24 @@ export default [
 			'react-refresh': reactRefresh
 		},
 		rules: {
+			'padding-line-between-statements': [
+				'error',
+				{
+					blankLine: 'always',
+					prev: 'block-like',
+					next: '*'
+				},
+				{
+					blankLine: 'always',
+					prev: '*',
+					next: 'if'
+				},
+				{
+					blankLine: 'always',
+					prev: '*',
+					next: 'return'
+				}
+			],
 			...js.configs.recommended.rules,
 			...react.configs.recommended.rules,
 			...react.configs['jsx-runtime'].rules,

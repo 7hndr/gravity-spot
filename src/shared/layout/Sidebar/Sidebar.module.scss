@@ -5,6 +5,7 @@
 	display: grid;
 	align-content: space-between;
 	grid-gap: 1rem;
+	z-index: 2000;
 }
 
 .sidebarTop {
@@ -17,4 +18,20 @@
 	display: grid;
 	grid-gap: 2rem;
 	justify-items: center;
+}
+
+.linkItem {
+	display: grid;
+	grid-gap: 1rem;
+	grid-auto-flow: column;
+	padding: 1rem 1.5rem;
+	text-decoration: none;
+	background-color: transparent;
+	justify-content: start;
+	border-radius: var(--border-radius);
+	transition: background 0.13s ease;
+
+	&:hover {
+		background-color: var(--hover);
+	}
 }

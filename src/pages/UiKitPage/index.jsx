@@ -1,9 +1,9 @@
 import { useTheme } from '@/shared/hooks/useTheme'
 import { Button, Text, Title, Block, Icon, Input } from '@/shared/ui'
-import styles from './ServicePage.module.scss'
+import styles from './UiKitPage.module.scss'
 import { useNotification } from '@/shared/hooks/useNotify'
 
-export const ServicePage = () => {
+export const UiKitPage = () => {
 	const { isDark, toggleTheme } = useTheme()
 	const sendNotify = useNotification()
 
@@ -182,6 +182,18 @@ export const ServicePage = () => {
 							error='Some error'
 							label='Wiht error'
 						/>
+					</Block>
+				</Block>
+				<Block width={256}>
+					<Title>Titles</Title>
+
+					<Block>
+						<Title size='h1'>H1 title</Title>
+						<Title size='h2'>H2 title</Title>
+						<Title size='h3'>H3 title</Title>
+						<Title size='h4'>H4 title</Title>
+						<Title size='h5'>H5 title</Title>
+						<Title size='h6'>H6 title</Title>
 					</Block>
 				</Block>
 			</div>

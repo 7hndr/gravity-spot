@@ -6,6 +6,7 @@ export const Button = ({
 	loading = false,
 	type = 'button',
 	simple = false,
+	mini = false,
 	active = false,
 	square = false,
 	className = '',
@@ -14,19 +15,23 @@ export const Button = ({
 	title,
 	_ref
 }) => {
+	const inert = disabled || loading
+
 	return (
 		<button
 			ref={_ref}
 			type={type}
 			className={`${styles.button} ${simple ? styles.simple : ''} ${
-				square ? styles.square : ''
-			} ${disabled ? styles.disabled : ''} ${
-				loading ? styles.loading : ''
-			} ${active ? styles.active : ''} ${className}`}
+				mini ? styles.mini : ''
+			} ${square ? styles.square : ''} ${
+				disabled ? styles.disabled : ''
+			} ${loading ? styles.loading : ''} ${
+				active ? styles.active : ''
+			} ${className}`}
 			onClick={onClick}
 			title={title}
 			disabled={disabled}
-			inert={String(disabled || loading)}
+			inert={inert ? String(inert) : null}
 		>
 			{!loading && children}
 		</button>

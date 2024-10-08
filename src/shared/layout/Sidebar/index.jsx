@@ -9,43 +9,79 @@ import {
 	Text,
 	Divider
 } from '@/shared/ui'
+import { useNavigate, useLocation, NavLink } from 'react-router-dom'
 import { useTheme } from '@/shared/hooks/useTheme'
 
 export const Sidebar = () => {
 	const { isDark, toggleTheme } = useTheme()
+	const navigate = useNavigate()
+	const location = useLocation()
+
+	const goTo = path => {
+		const _path = path.replace('/', '')
+
+		if (location.pathname !== `/${_path}`) {
+			navigate(`/${_path}`)
+		} else {
+			navigate('/')
+		}
+	}
 
 	return (
 		<div className={styles.sidebar}>
 			<div className={styles.sidebarTop}>
-				<Logo />
+				<NavLink to='/'>
+					<Logo />
+				</NavLink>
 			</div>
 			<div className={styles.sidebarBottom}>
 				<Button
-					onClick={() => null}
+					onClick={() => goTo('add-spot')}
 					square
 				>
 					<Icon name='plus' />
 				</Button>
+				<Button
+					onClick={() => goTo('spots')}
+					square
+				>
+					<Icon name='list' />
+				</Button>
 				<Dropdown className='my-dropdown'>
-					<Button>
+					<Button square>
 						<Icon name='ellipsis' />
 					</Button>
-					<Block>
+					<Block noPadding>
 						<Block col>
 							<Switch
 								checked={isDark}
 								onChange={toggleTheme}
+								label='Night mode'
 							/>
-							<Text>Night mode</Text>
 						</Block>
 						<Divider />
-						<Block
-							col
-							aic
+
+						<NavLink
+							to='/user'
+							className={styles.linkItem}
 						>
 							<Icon name='user' />
-							<Text>User settings</Text>
-						</Block>
+							<Text>User</Text>
+						</NavLink>
+						<NavLink
+							to='/ui-kit'
+							className={styles.linkItem}
+						>
+							<Icon name='toolbox' />
+							<Text>UI kit</Text>
+						</NavLink>
+						<NavLink
+							to='/entry?logout'
+							className={styles.linkItem}
+						>
+							<Icon name='door-open' />
+							<Text>Log out</Text>
+						</NavLink>
 					</Block>
 				</Dropdown>
 			</div>

@@ -1,14 +1,14 @@
 import { Outlet } from 'react-router-dom'
 import styles from './Root.module.scss'
-import { Sidebar, Card } from '../'
+import { Sidebar } from '../'
 
 export const Root = () => {
 	return (
 		<>
 			<div className={styles.root}>
-				<div className={styles.card}>
+				{/* <div className={styles.card}>
 					<Card />
-				</div>
+				</div> */}
 				<div className={styles.sidebar}>
 					<Sidebar />
 				</div>

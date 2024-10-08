@@ -1,0 +1,17 @@
+.card {
+	--padding: 1rem;
+	--card-width: 28rem;
+
+	display: grid;
+	position: absolute;
+	left: var(--padding);
+	top: var(--padding);
+	height: calc(100% - var(--padding) - var(--padding));
+	padding: var(--padding);
+	width: var(--card-width);
+	background-color: var(--bg);
+	z-index: 100;
+	border-radius: var(--border-radius);
+	border: 2px solid var(--field);
+	// box-shadow: var(--shadow) 2.4px 2.4px 3.2px;
+}

@@ -1,61 +1,111 @@
-import { useState } from 'react'
-import { Switch, Input, Button, Title } from '@/shared/ui'
+import { useState, useEffect } from 'react'
+import { Switch, Input, Button, Title, Icon } from '@/shared/ui'
 import styles from './Auth.module.scss'
 import { object, string } from 'yup'
+import { formModelByPurpouse, initialStateByPurpouse } from './config'
+import { useNotification } from '@/shared/hooks/useNotify'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { setCookie, deleteCookie } from '@/shared/helpers'
+const BASE_URL = 'http://localhost:3004'
 
-const GET = (url, body) => {
-	console.log('GET request:', url, body)
+const GET = async (url, body) => {
+	// console.log('GET request:', url, body)
+	if (url) {
+		return await new Promise(r => setTimeout(() => r(), 1000))
+	}
+
+	return fetch(`${BASE_URL}/users`, {})
+		.then(res => res.json())
+		.then(users => users?.find(u => u.email === body.email))
+		.then(user => {
+			if (user) {
+				return user
+			} else {
+				throw new Error('There is no user with this E-mail')
+			}
+		})
 }
 
 export const Auth = () => {
-	const [isLogin, setIsLogin] = useState(true)
-	const [formData, setFormData] = useState({
-		email: '',
-		password: '',
-		firstName: '',
-		secondName: ''
-	})
-	const [errors, setErrors] = useState({})
+	const navigate = useNavigate()
+	const [searchParams, setSearchParams] = useSearchParams()
 
-	const handleChange = event => {
-		setFormData({ ...formData, [event.target.name]: event.target.value })
+	const [isLogin, setIsLogin] = useState(true)
+	const [isLoading, setIsLoading] = useState(false)
+	const [errors, setErrors] = useState({})
+	const [formData, setFormData] = useState(initialStateByPurpouse(isLogin))
+
+	const sendNotify = useNotification()
+
+	//  ← — — — — — — — — — — — — {{ 🗲 }} — — — — — — — — — — — — → //
+
+	useEffect(() => {
+		if (searchParams.has('logout')) {
+			deleteCookie('token')
+			searchParams.delete('logout')
+			setSearchParams(searchParams)
+		}
+	})
+
+	//  ← — — — — — — — — — — — — {{ 🗲 }} — — — — — — — — — — — — → //
+
+	const handleReset = () => {
+		setFormData(initialStateByPurpouse(isLogin))
 	}
 
-	const handleSubmit = async event => {
-		event.preventDefault()
-		setErrors({})
-		try {
-			await schema(isLogin).validate(formData)
+	const handleChange = e => {
+		const { name, value } = e.target
 
-			// В зависимости от состояния логина или регистрации, выполняем запрос
-			if (isLogin) {
-				GET('/api/login', formData)
-			} else {
-				GET('/api/register', formData)
-			}
-		} catch (err) {
-			console.log({ ...err }, 123, err.errors)
-			if (err.errors) {
-				const newErrors = {}
-				err.errors.forEach(error => {
-					newErrors[err.path] = error
-				})
-				console.log(newErrors)
-				setErrors(newErrors)
-			}
+		setFormData({
+			...formData,
+			[name]: value
+		})
+	}
+
+	const handleSubmit = async e => {
+		e.preventDefault()
+		setIsLoading(true)
+
+		setErrors({})
+
+		await schema(isLogin)
+			.validate(formData)
+			.catch(err => {
+				if (err.errors) {
+					const newErrors = {}
+
+					err.errors.forEach(error => {
+						newErrors[err.path] = error
+					})
+					setErrors(newErrors)
+				}
+			})
+
+		try {
+			await GET(`api/${isLogin ? 'login' : 'register'}`, formData)
+			setCookie('token', 'test_token', 30)
+			navigate('/')
+		} catch (e) {
+			sendNotify({
+				message: e.message,
+				title: 'Error occured',
+				type: 'error'
+			})
+			throw e
+		} finally {
+			setIsLoading(false)
 		}
 	}
 
-	// Схема валидации на основе состояния isLogin
 	const schema = isLogin =>
 		object({
 			firstName: string().when(isLogin ? 'isLogin' : '', {
-				is: true, // Для регистрации поле "First name" обязательно
+				is: true,
 				then: schema => schema.required('First name is required'),
 				otherwise: schema => schema.notRequired()
 			}),
 			secondName: string().when(isLogin ? 'isLogin' : '', {
-				is: true, // Для регистрации поле "Second name" обязательно
+				is: true,
 				then: schema => schema.required('Second name is required'),
 				otherwise: schema => schema.notRequired()
 			}),
@@ -69,50 +119,42 @@ export const Auth = () => {
 
 	return (
 		<div className={styles.authContainer}>
-			<Title>Welcome</Title>
+			<Title>Hi there</Title>
+
 			<form
-				onSubmit={handleSubmit}
 				className={styles.form}
+				onSubmit={handleSubmit}
 			>
-				{!isLogin && (
-					<>
-						<Input
-							label='First name'
-							name='firstName'
-							onChange={handleChange}
-							error={errors.firstName}
-						/>
-						<Input
-							label='Second name'
-							name='secondName'
-							onChange={handleChange}
-							error={errors.secondName}
-						/>
-					</>
-				)}
-				<Input
-					label='E-mail'
-					name='email'
-					type='email'
-					onChange={handleChange}
-					error={errors.email}
-				/>
-				<Input
-					label='Password'
-					name='password'
-					type='password'
-					onChange={handleChange}
-					error={errors.password}
-				/>
-				<Button type='submit'>{isLogin ? 'Login' : 'Register'}</Button>
+				{formModelByPurpouse(isLogin).map(input => (
+					<Input
+						value={formData[input.name]}
+						onChange={handleChange}
+						key={input.name}
+						error={errors[input.id]}
+						{...input}
+					/>
+				))}
+				<div className={styles.formButtons}>
+					<Button
+						type='submit'
+						loading={isLoading}
+					>
+						{isLogin ? 'Enter' : 'Register'}
+					</Button>
+					<Button
+						onClick={handleReset}
+						type='button'
+						title='Reset'
+					>
+						<Icon name='arrow-rotate-left' />
+					</Button>
+				</div>
 			</form>
-			<div className={styles.switchContainer}>
-				<Switch
-					checked={isLogin}
-					onChange={() => setIsLogin(!isLogin)}
-					label="I'm already have an account"
-				/>
-			</div>
+			<Switch
+				checked={isLogin}
+				onChange={() => setIsLogin(!isLogin)}
+				label="I'm already have an account"
+			/>
 		</div>
 	)
 }

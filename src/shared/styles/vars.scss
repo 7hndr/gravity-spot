@@ -6,7 +6,9 @@
 	--secondary: #372857;
 	--accent: #785e9b;
 	// --field: #43368105;
+	--shadow: #00000050;
 	--field: #282a35;
+	--hover: #785e9b30;
 	--surface: #242734;
 	--error-text: #ad364acf;
 	--warning-text: #c7771be3;
@@ -14,14 +16,16 @@
 }
 
 .light-theme {
-	--bg: #dbdbdb;
+	--bg: #e9e9e9;
 	--text: #16171d;
 	--secondary-text: #24242450;
 	--primary: #5c9ab2;
 	--secondary: #b7a8d7;
 	--accent: #9b81c5;
 	// --field: #8a7ec905;
-	--field: #d9d4dd;
+	--shadow: #00000025;
+	--field: #d3cdd7;
+	--hover: #9b81c550;
 	--surface: #efefef;
 	--error-text: #9a273ae3;
 	--warning-text: #c7771be3;

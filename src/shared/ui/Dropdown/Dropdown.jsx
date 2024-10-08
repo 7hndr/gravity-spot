@@ -22,11 +22,13 @@ export const Dropdown = ({ children, className, align = 'left' }) => {
 				setIsOpen(false)
 			}
 		}
+
 		if (isOpen) {
 			document.addEventListener('mousedown', handleClickOutside)
 		} else {
 			document.removeEventListener('mousedown', handleClickOutside)
 		}
+
 		return () => {
 			document.removeEventListener('mousedown', handleClickOutside)
 		}
@@ -35,6 +37,7 @@ export const Dropdown = ({ children, className, align = 'left' }) => {
 		if (!dropdownRef.current) return 'down'
 		const dropdownRect = dropdownRef.current.getBoundingClientRect()
 		const windowHeight = window.innerHeight
+
 		if (dropdownRect.bottom + 200 > windowHeight) {
 			return 'up'
 		} else {
@@ -45,6 +48,7 @@ export const Dropdown = ({ children, className, align = 'left' }) => {
 	const getContentStyle = () => {
 		if (!dropdownRef.current) return {}
 		const dropdownRect = dropdownRef.current.getBoundingClientRect()
+
 		return {
 			top:
 				getDropdownDirection() === 'down'

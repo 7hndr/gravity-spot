@@ -13,15 +13,13 @@ export const Switch = ({ onChange, checked, label }) => {
 	}
 
 	return (
-		<div className={styles.switchWrapper}>
-			<label className={styles.switch}>
-				<input
-					type='checkbox'
-					checked={isChecked}
-					onChange={handleChange}
-				/>
-				<span className={`${styles.slider} ${styles.round}`} />
-			</label>
+		<label className={styles.switch}>
+			<input
+				type='checkbox'
+				checked={isChecked}
+				onChange={handleChange}
+			/>
+			<span className={`${styles.slider} ${styles.round}`} />
 			{label && (
 				<Text
 					className={styles.label}
@@ -30,6 +28,6 @@ export const Switch = ({ onChange, checked, label }) => {
 					{label}
 				</Text>
 			)}
-		</div>
+		</label>
 	)
 }
