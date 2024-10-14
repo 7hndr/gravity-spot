@@ -11,3 +11,12 @@
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
+
+.mapActions {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+	padding: 1rem;
+	background-color: var(--field);
+	border-radius: var(--border-radius);
+}
