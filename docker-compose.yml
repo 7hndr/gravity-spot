@@ -17,6 +17,7 @@ services:
       - '666:666'
     volumes:
       - ./server:/app
+      - /path/on/host/uploads:/usr/src/app/uploads
     networks:
       - dev
 

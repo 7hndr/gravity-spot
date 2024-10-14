@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . .
 
+RUN mkdir -p uploads
+
 EXPOSE 666
 
 CMD ["node", "index.js"]
