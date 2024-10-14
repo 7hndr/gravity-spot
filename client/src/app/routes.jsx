@@ -15,7 +15,7 @@ import {
 import { getCookie } from '@/shared/helpers'
 
 const loader = () => {
-	if (!getCookie('token')) {
+	if (!getCookie('accessToken')) {
 		throw redirect('/entry')
 	}
 

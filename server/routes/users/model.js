@@ -1,21 +1,26 @@
 import mongoose from 'mongoose'
+import validator from 'validator'
 
 const UserSchema = mongoose.Schema({
   id: {
     type: mongoose.Schema.Types.ObjectId,
     auto: true
   },
-  first_name: {
+  firstName: {
     type: String,
     required: true
   },
-  second_name: {
+  lastName: {
     type: String
   },
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    validate: {
+      validator: validator.isEmail,
+      message: 'Invalid email'
+    }
   },
   password: {
     type: String,

@@ -1,0 +1,27 @@
+.spotView {
+	display: grid;
+	grid-gap: 1rem;
+	align-content: start;
+}
+
+.img {
+	display: grid;
+	width: 100%;
+	object-fit: cover;
+	border-radius: var(--border-radius);
+	overflow: hidden;
+}
+
+.header {
+	grid-template-columns: auto 1fr auto;
+	grid-gap: 0.5rem;
+	display: grid;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.actions {
+	display: grid;
+	grid-gap: 0.5rem;
+	grid-auto-flow: column;
+}

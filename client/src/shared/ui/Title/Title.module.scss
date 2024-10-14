@@ -1,3 +1,13 @@
+@mixin line-clamp($lines: 1, $size: 1.5rem) {
+	overflow: hidden !important;
+	display: -webkit-box;
+	-webkit-line-clamp: $lines;
+	-webkit-box-orient: vertical;
+	text-overflow: ellipsis;
+	line-height: 1.5;
+	max-height: calc(($size * $lines));
+}
+
 .title {
 	font-family: var(--font);
 	text-align: left;
@@ -5,6 +15,11 @@
 	letter-spacing: 0;
 	font-size: 2rem;
 	color: var(--text);
+
+	a {
+		color: var(--text);
+		text-decoration: none;
+	}
 
 	&.secondary {
 		color: var(--secondary-text);
@@ -22,9 +37,17 @@
 		text-transform: uppercase;
 	}
 
+	&.ellipsis {
+		@include line-clamp(1, 2rem);
+	}
+
 	&.h1 {
 		font-size: 2rem;
 		font-weight: 400;
+
+		&.ellipsis {
+			@include line-clamp(1, 3rem);
+		}
 	}
 
 	&.h2 {

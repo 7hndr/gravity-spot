@@ -18,10 +18,10 @@ export const formModelByPurpouse = isLogin =>
 			purpouse: [REGISTRATION, AUTHORIZATION]
 		},
 		{
-			label: 'Last name',
-			type: 'lastName',
-			name: 'lastName',
-			id: 'lastName',
+			label: 'Repeat password',
+			name: 'passwordRepeat',
+			type: 'password',
+			id: 'passwordRepeat',
 			purpouse: [REGISTRATION]
 		},
 		{
@@ -31,12 +31,11 @@ export const formModelByPurpouse = isLogin =>
 			id: 'firstName',
 			purpouse: [REGISTRATION]
 		},
-
 		{
-			label: 'Repeat password',
-			name: 'passwordRepeat',
-			type: 'password',
-			id: 'passwordRepeat',
+			label: 'Last name',
+			type: 'lastName',
+			name: 'lastName',
+			id: 'lastName',
 			purpouse: [REGISTRATION]
 		}
 	].filter(input =>

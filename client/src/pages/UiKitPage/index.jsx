@@ -1,10 +1,11 @@
-import { useTheme } from '@/shared/hooks/useTheme'
+import { useAtom } from 'jotai'
+import { themeAtom } from '@/shared/theme/store'
 import { Button, Text, Title, Block, Icon, Input } from '@/shared/ui'
 import styles from './UiKitPage.module.scss'
 import { useNotification } from '@/shared/hooks/useNotify'
 
 export const UiKitPage = () => {
-	const { isDark, toggleTheme } = useTheme()
+	const [theme, setTheme] = useAtom(themeAtom)
 	const sendNotify = useNotification()
 
 	const colorVars = [
@@ -17,6 +18,12 @@ export const UiKitPage = () => {
 		'field',
 		'surface'
 	]
+
+	const toggleTheme = () => {
+		setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'))
+	}
+
+	const isDark = theme === 'dark'
 
 	return (
 		<div className={styles.wrapper}>

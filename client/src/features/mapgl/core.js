@@ -6,19 +6,23 @@ const DEFAULT_COORDS = [-74.0, 40.738]
 
 const themeStylesConfig = {
 	light: 'mapbox://styles/mapbox/light-v11',
-	dark: 'mapbox://styles/thndr-/cm0wy94nv00y901pbdmdj3f24',
-	spare: `https://api.mapbox.com/styles/v1/mapbox/cj3kbeqzo00022smj7akz3o1e?access_token=${VITE_MAPBOX_TOKEN}`
+	dark: 'mapbox://styles/thndr-/cm0wy94nv00y901pbdmdj3f24'
+	// spare: `https://api.mapbox.com/styles/v1/mapbox/cj3kbeqzo00022smj7akz3o1e?access_token=${VITE_MAPBOX_TOKEN}`
 }
 
 export class MapController {
-	constructor({ container, initCoords, theme }) {
+	constructor({ initCoords, theme }) {
 		this.theme = theme
-		this.container = container
+		this.container = 'mapgl'
 		this.initCoords = initCoords
 		this.updateTheme = this.updateTheme.bind(this)
 		this.mapgl = null
 		this.offset = 0
 		this.userCoordsDelay = 1024
+	}
+
+	getInstance() {
+		return this.mapgl
 	}
 
 	async init() {
@@ -33,9 +37,9 @@ export class MapController {
 			language: 'auto',
 			logoPosition: 'bottom-right',
 			// projection: 'mercator',
-			projection: 'globe',
-			style: themeStylesConfig[this.theme] ?? themeStylesConfig.spare,
-			zoom: 15,
+			// projection: 'globe',
+			style: themeStylesConfig[this.theme] ?? themeStylesConfig.dark,
+			zoom: 11,
 			center: this.initCoords
 		})
 
@@ -52,23 +56,28 @@ export class MapController {
 					this.mapgl.flyTo({
 						speed: 3,
 						center: [lon, lat],
-						padding: { left: 400 },
 						essential: true
 					})
 				}
 			)
 		}
 
-		return this.mapgl
+		return new Promise(r => this.mapgl.on('load', e => r(e.target)))
 	}
 
-	updateTheme({ theme }) {
-		if (this.theme === theme) return
+	async updateTheme({ theme }) {
+		if (this.theme !== theme) {
+			this.theme = theme
+			this.mapgl.setStyle(
+				themeStylesConfig[theme] ?? themeStylesConfig.spare
+			)
 
-		this.theme = theme
-		this.mapgl?.setStyle(
-			themeStylesConfig[theme] ?? themeStylesConfig.spare
-		)
+			return new Promise(r =>
+				this.mapgl.on('styledata', async e => r(e.target))
+			)
+		} else {
+			return this.mapgl
+		}
 	}
 
 	setPadding(left = 0) {

@@ -1,0 +1,11 @@
+.form {
+	display: grid;
+	grid-gap: 1rem;
+	align-content: start;
+}
+
+.formActions {
+	display: grid;
+	grid-gap: 1rem;
+	grid-auto-flow: column;
+}

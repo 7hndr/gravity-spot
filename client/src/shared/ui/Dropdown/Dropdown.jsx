@@ -1,14 +1,30 @@
 import { useState, useRef, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import styles from './Dropdown.module.scss'
-import ReactDOM from 'react-dom'
+import { createPortal } from 'react-dom'
 
-export const Dropdown = ({ children, className, align = 'left' }) => {
+export const Dropdown = ({
+	children,
+	className,
+	align = 'left',
+	closeOnSelect = false,
+	stretch = false
+}) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const dropdownRef = useRef(null)
 	const contentRef = useRef(null)
+	const location = useLocation()
 
 	const toggleDropdown = () => {
 		setIsOpen(!isOpen)
+	}
+
+	const handleItemClick = () => {
+		if (closeOnSelect) {
+			setTimeout(() => {
+				setIsOpen(false)
+			}, 16)
+		}
 	}
 
 	useEffect(() => {
@@ -33,6 +49,11 @@ export const Dropdown = ({ children, className, align = 'left' }) => {
 			document.removeEventListener('mousedown', handleClickOutside)
 		}
 	}, [isOpen])
+
+	useEffect(() => {
+		setIsOpen(false)
+	}, [location])
+
 	const getDropdownDirection = () => {
 		if (!dropdownRef.current) return 'down'
 		const dropdownRect = dropdownRef.current.getBoundingClientRect()
@@ -49,7 +70,7 @@ export const Dropdown = ({ children, className, align = 'left' }) => {
 		if (!dropdownRef.current) return {}
 		const dropdownRect = dropdownRef.current.getBoundingClientRect()
 
-		return {
+		const style = {
 			top:
 				getDropdownDirection() === 'down'
 					? dropdownRect.bottom + 16
@@ -58,33 +79,44 @@ export const Dropdown = ({ children, className, align = 'left' }) => {
 				getDropdownDirection() === 'up'
 					? window.innerHeight - dropdownRect.top + 16
 					: 'auto',
-			left: align === 'left' ? dropdownRect.left : 'auto', // Выравнивание слева
+			left: align === 'left' ? dropdownRect.left : 'auto',
 			right:
 				align === 'right'
 					? window.innerWidth - dropdownRect.right + 16
-					: 'auto' // Выравнивание справа
+					: 'auto'
 		}
+
+		if (stretch) {
+			style.width = dropdownRect.width
+		}
+
+		return style
+	}
+
+	const DropdownPortal = ({ children }) => {
+		return createPortal(children, document.getElementById('App'))
 	}
 
 	return (
 		<div
-			className={`dropdown ${className}`}
+			className={`dropdown ${className || ''}`}
 			ref={dropdownRef}
 		>
 			<div onClick={toggleDropdown}>{children[0]}</div>
-			{isOpen &&
-				ReactDOM.createPortal(
+			{isOpen && (
+				<DropdownPortal>
 					<div
 						className={`${
 							styles.dropdownContent
-						} ${getDropdownDirection()}`} // Используем styles.dropdownContent
+						} ${getDropdownDirection()}`}
 						ref={contentRef}
 						style={getContentStyle()}
+						onClick={handleItemClick}
 					>
 						{children.slice(1)}
-					</div>,
-					document.getElementById('App')
-				)}
+					</div>
+				</DropdownPortal>
+			)}
 		</div>
 	)
 }

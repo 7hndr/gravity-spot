@@ -6,6 +6,7 @@ export const Block = ({
 	simple,
 	aic,
 	ais,
+	sb,
 	width,
 	noPadding,
 	className = ''
@@ -15,6 +16,7 @@ export const Block = ({
 		col ? styles.col : '',
 		aic ? styles.aic : '',
 		ais ? styles.ais : '',
+		sb ? styles.sb : '',
 		simple ? styles.simple : '',
 		noPadding ? styles.noPadding : '',
 		className

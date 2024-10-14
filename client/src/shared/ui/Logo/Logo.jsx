@@ -1,14 +1,15 @@
 import logoLight from '@/shared/assets/images/logo/GravitySpot_logo_light.svg'
 import logoDark from '@/shared/assets/images/logo/GravitySpot_logo_dark.svg'
 import styles from './Logo.module.scss'
-import { useTheme } from '@/shared/hooks/useTheme'
+import { useAtom } from 'jotai'
+import { themeAtom } from '@/shared/theme/store'
 
 export const Logo = () => {
-	const { isDark } = useTheme()
+	const [theme] = useAtom(themeAtom)
 
 	return (
 		<img
-			src={isDark ? logoLight : logoDark}
+			src={theme === 'dark' ? logoLight : logoDark}
 			alt='logo'
 			className={styles.logoImg}
 		/>

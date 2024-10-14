@@ -4,7 +4,7 @@ import styles from './Notification.module.scss'
 
 export const Notification = ({
 	message,
-	title,
+	title = 'Notification',
 	duration = 3000,
 	type = 'default',
 	onClose

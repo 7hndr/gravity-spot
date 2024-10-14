@@ -1,0 +1,43 @@
+.selectWrapper {
+	position: relative;
+	width: 100%;
+}
+
+.dropdown {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	width: 100%;
+	max-height: 200px;
+	overflow-y: auto;
+	background-color: var(--background-color);
+	border: 1px solid var(--border-color);
+	border-top: none;
+	border-radius: 0 0 8px 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+}
+
+.option {
+	display: grid;
+	grid-gap: 1rem;
+	grid-auto-flow: column;
+	padding: 1rem 1.5rem;
+	text-decoration: none;
+	background-color: transparent;
+	justify-content: start;
+	border-radius: var(--border-radius);
+	cursor: pointer;
+	transition: background 0.13s ease;
+
+	&:hover {
+		background-color: var(--hover);
+	}
+}
+
+.isOpenIndicator {
+	position: absolute;
+	right: 1rem;
+	top: 50%;
+	transform: translateY(50%);
+}

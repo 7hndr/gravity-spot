@@ -1,7 +1,13 @@
 .MainPage {
 	display: flex;
-	// grid-auto-flow: column;
 	width: 100%;
 	position: relative;
 	grid-template-rows: auto;
+}
+
+.loader {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }

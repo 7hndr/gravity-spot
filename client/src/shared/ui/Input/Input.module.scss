@@ -2,9 +2,19 @@
 	position: relative;
 	display: grid;
 	grid-gap: 0.25rem;
+
+	&:hover {
+		.rightIcon {
+			display: none;
+		}
+
+		.inputCleaner {
+			display: grid;
+		}
+	}
 }
-// TODO: remove styled
-.styledLabel {
+
+.label {
 	color: var(--text);
 	font-size: 1rem;
 
@@ -13,7 +23,22 @@
 	}
 }
 
-.styledInput {
+.rightIcon {
+	position: absolute;
+	right: 0.5rem;
+	transform: translateY(50%);
+	bottom: 1.5rem;
+	width: 1rem;
+	display: grid;
+	height: 1rem;
+
+	i {
+		transition: color 0.13s ease;
+		color: var(--secondary-text);
+	}
+}
+
+.originInput {
 	color: var(--text);
 	display: grid;
 	align-items: center;
@@ -30,16 +55,20 @@
 		outline: 3px solid var(--accent);
 		outline-offset: -3px;
 	}
+
+	&:disabled {
+		opacity: 0.5;
+	}
 }
 
 .inputCleaner {
+	display: none;
 	position: absolute;
 	right: 0.5rem;
 	transform: translateY(50%);
 	bottom: 1.5rem;
 	width: 1rem;
 	height: 1rem;
-	display: grid;
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;

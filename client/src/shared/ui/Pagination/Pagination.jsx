@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import styles from './Pagination.module.scss'
-
+import { Button, Text } from '@/shared/ui'
 export const Pagination = ({
 	totalPages,
 	currentPage,
@@ -16,20 +16,20 @@ export const Pagination = ({
 		const endPage = Math.min(totalPages, startPage + pageRangeDisplayed - 1)
 
 		for (let i = startPage; i <= endPage; i++) {
-			// Определяем класс активной страницы
 			const buttonClass =
 				i === currentPage
 					? `${styles.pageButton} ${styles.active}`
 					: styles.pageButton
 
 			pages.push(
-				<button
+				<Button
+					simple
 					key={i}
 					className={buttonClass}
 					onClick={() => onPageChange(i)}
 				>
 					{i}
-				</button>
+				</Button>
 			)
 		}
 
@@ -38,41 +38,45 @@ export const Pagination = ({
 
 	return (
 		<div className={styles.paginationWrapper}>
-			<button
+			<Button
+				simple
 				onClick={() => onPageChange(1)}
 				disabled={currentPage === 1}
 				className={styles.pageButton}
 			>
 				First
-			</button>
-			<button
+			</Button>
+			<Button
+				simple
 				onClick={() => onPageChange(currentPage - 1)}
 				disabled={currentPage === 1}
 				className={styles.pageButton}
 			>
 				Prev
-			</button>
+			</Button>
 			{currentPage > pageRangeDisplayed && (
-				<span className={styles.ellipsis}>...</span>
+				<Text className={styles.ellipsis}>...</Text>
 			)}
 			{createPageNumbers()}
 			{currentPage < totalPages - pageRangeDisplayed && (
-				<span className={styles.ellipsis}>...</span>
+				<Text className={styles.ellipsis}>...</Text>
 			)}
-			<button
+			<Button
+				simple
 				onClick={() => onPageChange(currentPage + 1)}
 				disabled={currentPage === totalPages}
 				className={styles.pageButton}
 			>
 				Next
-			</button>
-			<button
+			</Button>
+			<Button
+				simple
 				onClick={() => onPageChange(totalPages)}
 				disabled={currentPage === totalPages}
 				className={styles.pageButton}
 			>
 				Last
-			</button>
+			</Button>
 		</div>
 	)
 }

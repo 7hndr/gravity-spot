@@ -9,27 +9,37 @@ export const SpotListItem = ({
 	name,
 	description,
 	image_url,
-	adress,
+	address,
 	geom
 }) => {
 	const { mapgl } = useContext(MapContext)
 
 	const flyToHandler = () => {
-		mapgl?.flyTo({ essential: true, center: geom.coordinates })
+		mapgl?.flyTo({
+			essential: true,
+			center: geom.coordinates,
+			padding: { left: 400 },
+			speed: 2,
+			zoom: 16
+		})
 	}
 
 	return (
 		<article className={styles.spotListItem}>
 			<img
+				loading='lazy'
 				src={image_url}
 				className={styles.img}
 				alt={name}
 			/>
 
-			<Title size='h3'>
+			<Title
+				size='h3'
+				className={styles.title}
+				ellipsis
+			>
 				<NavLink
 					to={`/spots/${id}`}
-					className={styles.title}
 					title={name}
 				>
 					{name}
@@ -43,7 +53,7 @@ export const SpotListItem = ({
 				className={styles.focus}
 				onClick={flyToHandler}
 			>
-				<Icon name='arrows-to-dot' />
+				<Icon name='location-crosshairs' />
 			</Button>
 			<Text
 				type='secondary'
@@ -53,9 +63,9 @@ export const SpotListItem = ({
 			</Text>
 			<Text
 				type='secondary'
-				className={styles.adress}
+				className={styles.address}
 			>
-				{adress}
+				{address}
 			</Text>
 		</article>
 	)

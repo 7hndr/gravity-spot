@@ -1,39 +1,26 @@
-import { useState, useEffect } from 'react'
-import { Switch, Input, Button, Title, Icon } from '@/shared/ui'
-import styles from './Auth.module.scss'
-import { object, string } from 'yup'
 import { formModelByPurpouse, initialStateByPurpouse } from './config'
-import { useNotification } from '@/shared/hooks/useNotify'
+import { Switch, Input, Button, Title, Icon } from '@/shared/ui'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { setCookie, deleteCookie } from '@/shared/helpers'
-const BASE_URL = 'http://localhost:3004'
-
-const GET = async (url, body) => {
-	// console.log('GET request:', url, body)
-	if (url) {
-		return await new Promise(r => setTimeout(() => r(), 1000))
-	}
-
-	return fetch(`${BASE_URL}/users`, {})
-		.then(res => res.json())
-		.then(users => users?.find(u => u.email === body.email))
-		.then(user => {
-			if (user) {
-				return user
-			} else {
-				throw new Error('There is no user with this E-mail')
-			}
-		})
-}
+import { useNotification } from '@/shared/hooks/useNotify'
+import { isAuthenticatedAtom, userAtom } from './state'
+import { useMutation } from '@tanstack/react-query'
+import { useState, useEffect } from 'react'
+import styles from './Auth.module.scss'
+import { object, string } from 'yup'
+import { POST } from '@/shared/api'
+import { useSetAtom } from 'jotai'
 
 export const Auth = () => {
 	const navigate = useNavigate()
 	const [searchParams, setSearchParams] = useSearchParams()
-
 	const [isLogin, setIsLogin] = useState(true)
+	const [formModel, setFormModel] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [errors, setErrors] = useState({})
 	const [formData, setFormData] = useState(initialStateByPurpouse(isLogin))
+	const setIsAuthenticated = useSetAtom(isAuthenticatedAtom)
+	const setUser = useSetAtom(userAtom)
 
 	const sendNotify = useNotification()
 
@@ -41,7 +28,10 @@ export const Auth = () => {
 
 	useEffect(() => {
 		if (searchParams.has('logout')) {
-			deleteCookie('token')
+			deleteCookie('accessToken')
+			deleteCookie('refreshToken')
+			setIsAuthenticated(false)
+			setUser(null)
 			searchParams.delete('logout')
 			setSearchParams(searchParams)
 		}
@@ -53,6 +43,10 @@ export const Auth = () => {
 		setFormData(initialStateByPurpouse(isLogin))
 	}
 
+	const changeAuthType = () => {
+		setIsLogin(!isLogin)
+	}
+
 	const handleChange = e => {
 		const { name, value } = e.target
 
@@ -62,28 +56,81 @@ export const Auth = () => {
 		})
 	}
 
+	const registerMutation = useMutation({
+		mutationFn: async formData => {
+			const { accessToken, refreshToken, user } = await POST(
+				`users/register`,
+				formData
+			)
+			setCookie('accessToken', accessToken, 1)
+			setCookie('refreshToken', refreshToken, 7)
+			setIsAuthenticated(true)
+			setUser(user)
+		},
+		onSuccess: () => {
+			navigate('/')
+		},
+		onError: e => {
+			sendNotify({
+				message: e.message,
+				title: 'Error occurred',
+				type: 'error'
+			})
+		}
+	})
+
+	const loginMutation = useMutation({
+		mutationFn: async formData => {
+			const { accessToken, refreshToken, user } = await POST(
+				`users/login`,
+				formData
+			)
+			setCookie('accessToken', accessToken, 1)
+			setCookie('refreshToken', refreshToken, 7)
+			setIsAuthenticated(true)
+			setUser(user)
+		},
+		onSuccess: () => {
+			navigate('/')
+		},
+		onError: e => {
+			sendNotify({
+				message: e.message,
+				title: 'Error occurred',
+				type: 'error'
+			})
+		}
+	})
+
 	const handleSubmit = async e => {
 		e.preventDefault()
 		setIsLoading(true)
 
 		setErrors({})
+		try {
+			await schema(isLogin)
+				.validate(formData)
+				.catch(err => {
+					if (err.errors) {
+						const newErrors = {}
 
-		await schema(isLogin)
-			.validate(formData)
-			.catch(err => {
-				if (err.errors) {
-					const newErrors = {}
-
-					err.errors.forEach(error => {
-						newErrors[err.path] = error
-					})
-					setErrors(newErrors)
-				}
-			})
+						err.errors.forEach(error => {
+							newErrors[err.path] = error
+						})
+						setErrors(newErrors)
+					}
+				})
+		} catch (e) {
+			throw new Error(e)
+		}
 
 		try {
-			await GET(`api/${isLogin ? 'login' : 'register'}`, formData)
-			setCookie('token', 'test_token', 30)
+			if (isLogin) {
+				loginMutation.mutate(formData)
+			} else {
+				registerMutation.mutate(formData)
+			}
+
 			navigate('/')
 		} catch (e) {
 			sendNotify({
@@ -97,25 +144,32 @@ export const Auth = () => {
 		}
 	}
 
-	const schema = isLogin =>
-		object({
-			firstName: string().when(isLogin ? 'isLogin' : '', {
-				is: true,
-				then: schema => schema.required('First name is required'),
-				otherwise: schema => schema.notRequired()
-			}),
-			secondName: string().when(isLogin ? 'isLogin' : '', {
-				is: true,
-				then: schema => schema.required('Second name is required'),
-				otherwise: schema => schema.notRequired()
-			}),
+	const schema = isLogin => {
+		return object({
+			firstName: isLogin
+				? string().notRequired()
+				: string().required('First name is required'),
+			lastName: isLogin
+				? string().notRequired()
+				: string().required('Last name is required'),
 			email: string()
 				.email('Invalid email')
 				.required('Email is required'),
 			password: string()
 				.min(6, 'Password must be at least 6 characters')
-				.required('Password is required')
+				.required('Password is required'),
+			passwordRepeat: !isLogin
+				? string()
+						.oneOf([formData.password], 'Passwords must match')
+						.required('Repeat password is required')
+				: string().notRequired()
 		})
+	}
+
+	useEffect(() => {
+		setFormModel(formModelByPurpouse(isLogin))
+		setFormData(initialStateByPurpouse(isLogin))
+	}, [isLogin])
 
 	return (
 		<div className={styles.authContainer}>
@@ -125,7 +179,7 @@ export const Auth = () => {
 				className={styles.form}
 				onSubmit={handleSubmit}
 			>
-				{formModelByPurpouse(isLogin).map(input => (
+				{formModel.map(input => (
 					<Input
 						value={formData[input.name]}
 						onChange={handleChange}
@@ -152,7 +206,7 @@ export const Auth = () => {
 			</form>
 			<Switch
 				checked={isLogin}
-				onChange={() => setIsLogin(!isLogin)}
+				onChange={changeAuthType}
 				label="I'm already have an account"
 			/>
 		</div>

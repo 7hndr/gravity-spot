@@ -62,3 +62,43 @@ export const formatDate = date => {
 		weekday: 'long'
 	})
 }
+
+export const transformLngLatToGeom = lngLat => {
+	return {
+		type: 'Point',
+		coordinates: [lngLat.lng, lngLat.lat]
+	}
+}
+
+export const loadMapIcon = (mapgl, icon) => {
+	if (!mapgl || mapgl._removed) return
+
+	const MAP_ICON_SIZE = 64
+
+	const addImageToMap = (name, image, sdf) => {
+		if (mapgl && !mapgl._removed && !mapgl.hasImage(name)) {
+			mapgl.addImage(name, image, { sdf })
+		}
+	}
+
+	return new Promise(resolve => {
+		const size = icon.size ?? MAP_ICON_SIZE
+		const image = new Image(size, size)
+		image.crossOrigin = 'Anonymous'
+
+		image.addEventListener('load', () => {
+			addImageToMap(icon.name, image, icon.sdf)
+			resolve()
+		})
+
+		image.src = icon.url
+	})
+}
+
+export const getCssVariableValue = cssVariableName => {
+	return (
+		getComputedStyle(document.getElementById('App'))
+			.getPropertyValue(`--${cssVariableName}`)
+			.trim() || '#000000'
+	)
+}

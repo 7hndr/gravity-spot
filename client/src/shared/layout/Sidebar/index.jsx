@@ -1,3 +1,6 @@
+import { useAtom } from 'jotai'
+import { useLocation } from 'react-router-dom'
+
 import styles from './Sidebar.module.scss'
 import {
 	Button,
@@ -9,23 +12,21 @@ import {
 	Text,
 	Divider
 } from '@/shared/ui'
-import { useNavigate, useLocation, NavLink } from 'react-router-dom'
-import { useTheme } from '@/shared/hooks/useTheme'
+import { NavLink } from 'react-router-dom'
+import { themeAtom } from '@/shared/theme/store'
+import { isAuthenticatedAtom, userAtom } from '@/features/auth/state'
 
 export const Sidebar = () => {
-	const { isDark, toggleTheme } = useTheme()
-	const navigate = useNavigate()
+	const [isAuthenticated] = useAtom(isAuthenticatedAtom)
+	const [user] = useAtom(userAtom)
+	const [theme, setTheme] = useAtom(themeAtom)
 	const location = useLocation()
 
-	const goTo = path => {
-		const _path = path.replace('/', '')
-
-		if (location.pathname !== `/${_path}`) {
-			navigate(`/${_path}`)
-		} else {
-			navigate('/')
-		}
+	const toggleTheme = () => {
+		setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'))
 	}
+
+	const isDark = theme === 'dark'
 
 	return (
 		<div className={styles.sidebar}>
@@ -35,19 +36,23 @@ export const Sidebar = () => {
 				</NavLink>
 			</div>
 			<div className={styles.sidebarBottom}>
-				<Button
-					onClick={() => goTo('add-spot')}
-					square
+				<NavLink
+					to='/add-spot'
+					className={styles.linkButton}
 				>
-					<Icon name='plus' />
-				</Button>
-				<Button
-					onClick={() => goTo('spots')}
-					square
+					<Button square>
+						<Icon name='plus' />
+					</Button>
+				</NavLink>
+				<NavLink
+					to={location.pathname === '/spots' ? '/' : '/spots'}
+					className={styles.linkButton}
 				>
-					<Icon name='list' />
-				</Button>
-				<Dropdown className='my-dropdown'>
+					<Button square>
+						<Icon name='list' />
+					</Button>
+				</NavLink>
+				<Dropdown>
 					<Button square>
 						<Icon name='ellipsis' />
 					</Button>
@@ -59,15 +64,6 @@ export const Sidebar = () => {
 								label='Night mode'
 							/>
 						</Block>
-						<Divider />
-
-						<NavLink
-							to='/user'
-							className={styles.linkItem}
-						>
-							<Icon name='user' />
-							<Text>User</Text>
-						</NavLink>
 						<NavLink
 							to='/ui-kit'
 							className={styles.linkItem}
@@ -75,13 +71,30 @@ export const Sidebar = () => {
 							<Icon name='toolbox' />
 							<Text>UI kit</Text>
 						</NavLink>
-						<NavLink
-							to='/entry?logout'
-							className={styles.linkItem}
-						>
-							<Icon name='door-open' />
-							<Text>Log out</Text>
-						</NavLink>
+						{location.pathname !== '/entry' && (
+							<>
+								<Divider />
+								{isAuthenticated && (
+									<NavLink
+										to='/user'
+										className={styles.linkItem}
+									>
+										<Icon name='user' />
+										<Text>{user?.firstName}</Text>
+									</NavLink>
+								)}
+
+								<NavLink
+									to='/entry?logout'
+									className={styles.linkItem}
+								>
+									<Icon name='door-open' />
+									<Text>
+										{isAuthenticated ? 'Log out' : 'Log in'}
+									</Text>
+								</NavLink>
+							</>
+						)}
 					</Block>
 				</Dropdown>
 			</div>

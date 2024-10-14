@@ -7,6 +7,7 @@ export const Title = ({
 	type = 'primary',
 	className = '',
 	center = false,
+	ellipsis = false,
 	uppercase = false,
 	letterSpacing = '0',
 	weight = null
@@ -14,13 +15,14 @@ export const Title = ({
 	const typeClass = styles[type] || ''
 	const sizeClass = styles[size] || ''
 	const centerClass = center ? styles.center : ''
+	const ellipsisClass = ellipsis ? styles.ellipsis : ''
 	const uppercaseClass = uppercase ? styles.uppercase : ''
 
 	const Tag = size
 
 	return (
 		<Tag
-			className={`${styles.title} ${typeClass} ${sizeClass} ${centerClass} ${uppercaseClass} ${className}`}
+			className={`${styles.title} ${typeClass} ${sizeClass} ${centerClass} ${ellipsisClass} ${uppercaseClass} ${className}`}
 			style={{ letterSpacing, fontWeight: weight }}
 			title={children}
 		>

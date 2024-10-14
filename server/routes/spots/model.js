@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const geomSchema = new mongoose.Schema({
+const GeomSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: ['Point'],
@@ -14,33 +14,42 @@ const geomSchema = new mongoose.Schema({
 
 export const SpotSchema = mongoose.Schema({
   user_id: {
+    name: 'User',
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
+    hidden: true
   },
   name: {
+    name: 'Spot name',
     type: String,
     required: true
   },
-  geom: geomSchema,
-  tag_ids: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'Tag',
-    required: true
-  },
+  geom: GeomSchema,
+  // tag_ids: {
+  //   name: 'Tags',
+  //   type: [mongoose.Schema.Types.ObjectId],
+  //   ref: 'Tag'
+  //   required: true
+  // },
   description: {
+    name: 'Description',
     type: String,
     required: true
   },
   image_url: {
+    name: 'Image link',
     type: String,
     required: true
   },
   created_at: {
+    name: 'Created',
     type: Date,
-    required: true
+    hidden: true,
+    default: Date.now()
   },
-  adress: {
+  address: {
+    name: 'Address',
     type: String,
     required: true
   }

@@ -21,7 +21,7 @@
 	grid-template-areas:
 		'img title focus'
 		'img desc desc'
-		'img adress adress';
+		'img address address';
 	padding: 0.5rem;
 	border-radius: var(--border-radius);
 	border: 2px solid var(--field);
@@ -46,13 +46,13 @@
 .title {
 	grid-area: title;
 	@include line-clamp(1, 3rem);
-	text-decoration: none;
-	color: var(--text);
 
-	&::before {
-		position: absolute;
-		content: '';
-		inset: 0;
+	a {
+		&::before {
+			position: absolute;
+			content: '';
+			inset: 0;
+		}
 	}
 }
 
@@ -61,8 +61,8 @@
 	@include line-clamp(2);
 }
 
-.adress {
-	grid-area: adress;
+.address {
+	grid-area: address;
 	@include line-clamp(1);
 }
 

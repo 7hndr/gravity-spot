@@ -4,7 +4,18 @@ import styles from './Input.module.scss'
 import { Icon } from '..'
 
 export const Input = forwardRef(
-	({ label, className, error, onChange, setFocus, ...otherProps }, ref) => {
+	(
+		{
+			label,
+			className,
+			error,
+			onChange,
+			setFocus,
+			rightIcon,
+			...otherProps
+		},
+		ref
+	) => {
 		const [inputValue, setInputValue] = useState(
 			otherProps.defaultValue || ''
 		)
@@ -38,7 +49,7 @@ export const Input = forwardRef(
 					{label && (
 						<label
 							htmlFor={otherProps.id}
-							className={styles.styledLabel}
+							className={styles.label}
 						>
 							{label}
 						</label>
@@ -47,9 +58,14 @@ export const Input = forwardRef(
 						value={inputValue}
 						ref={ref || internalRef}
 						onChange={handleChange}
-						className={styles.styledInput}
+						className={styles.originInput}
 						{...otherProps}
 					/>
+					{rightIcon && (
+						<div className={styles.rightIcon}>
+							<Icon name={rightIcon} />
+						</div>
+					)}
 					{(!!inputValue || !!otherProps.value) && (
 						<button
 							onClick={clearHandler}
@@ -74,5 +90,6 @@ Input.propTypes = {
 	error: PropTypes.string,
 	onChange: PropTypes.func,
 	setFocus: PropTypes.func,
+	rightIcon: PropTypes.string,
 	otherProps: PropTypes.object
 }
