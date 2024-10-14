@@ -29,26 +29,29 @@ export const SpotView = ({ data, onEdit, onDelete, onFlyTo, onReturn }) => {
 						{data.name}
 					</Title>
 					<div className={styles.actions}>
-						<Button
-							mini
-							simple
-							square
-							onClick={onEdit}
-						>
-							<Icon name='pen-to-square' />
-						</Button>
-						<Button
-							mini
-							simple
-							square
-							onClick={onDelete}
-							disabled={user?.id !== data?.user_id}
-						>
-							<Icon
-								color='var(--error-text)'
-								name='trash-can'
-							/>
-						</Button>
+						{user?.id === data?.user_id && (
+							<>
+								<Button
+									mini
+									simple
+									square
+									onClick={onEdit}
+								>
+									<Icon name='pen-to-square' />
+								</Button>
+								<Button
+									mini
+									simple
+									square
+									onClick={onDelete}
+								>
+									<Icon
+										color='var(--error-text)'
+										name='trash-can'
+									/>
+								</Button>
+							</>
+						)}
 						<Button
 							mini
 							simple

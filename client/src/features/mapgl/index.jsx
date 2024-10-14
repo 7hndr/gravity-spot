@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from 'react'
+import { useEffect, useCallback, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { MapController } from './core'
 import { useAtomValue } from 'jotai'
@@ -11,16 +11,20 @@ const SIDEBAR_PAGES = ['spots', 'add-spot', 'spot']
 export const Map = ({ onLoaded }) => {
 	const theme = useAtomValue(themeAtom)
 	const mapController = useRef(null)
+	const updateTimeoutRef = useRef(null)
 
 	const { pathname } = useLocation()
+	const [lastPathname, setLastPathname] = useState(pathname)
 
 	const updatePadding = useCallback(() => {
 		if (!mapController.current.getInstance()) return
 
-		const pageWithSidebar = SIDEBAR_PAGES.some(p => pathname.includes(p))
+		const pageWithSidebar = SIDEBAR_PAGES.some(p =>
+			lastPathname.includes(p)
+		)
 
 		mapController.current.setPadding(pageWithSidebar ? 400 : 0)
-	}, [pathname])
+	}, [lastPathname])
 
 	const initMap = useCallback(async () => {
 		if (!mapController.current?.getInstance()) {
@@ -38,19 +42,29 @@ export const Map = ({ onLoaded }) => {
 			}
 
 			const mapgl = await mapController.current.updateTheme({ theme })
-			setTimeout(() => {
+
+			if (updateTimeoutRef.current) {
+				clearTimeout(updateTimeoutRef.current)
+			}
+
+			updateTimeoutRef.current = setTimeout(() => {
 				onLoaded(mapgl)
-
 				updatePadding()
-			}, 1111)
+			}, 1024)
 		}
-
-		updatePadding()
 	}, [theme, updatePadding, onLoaded])
 
 	useEffect(() => {
 		initMap()
-	}, [initMap, pathname, theme])
+	}, [initMap, theme])
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setLastPathname(pathname)
+		}, 100)
+
+		return () => clearTimeout(timer)
+	}, [pathname])
 
 	return (
 		<div
