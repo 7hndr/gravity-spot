@@ -114,7 +114,6 @@ export const createSpot = async (req, res) => {
       image_url: imageUrl
     }
 
-    // console.log('spotData', spotData)
     const newSpot = await Spot.create(spotData)
     res
       .status(201)
