@@ -10,7 +10,7 @@ import schemasRoutes from './routes/schemas/index.js'
 
 //  ← — — — — — — — — — — — — {{ 🗲 }} — — — — — — — — — — — — → //
 
-dotenv.config({ path: '.env.local' })
+dotenv.config({ path: '.env' })
 const MONGO_DB_URL = process.env.MONGO_DB_URL
 const PORT = process.env.PORT
 
