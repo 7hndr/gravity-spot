@@ -1,4 +1,4 @@
-const VITE_HOST = import.meta.env.VITE_HOST
+const VITE_HOST = import.meta.env.VITE_HOST || ''
 const VITE_DEV_HOST = import.meta.env.VITE_DEV_HOST
 const DEV = import.meta.env.DEV
 import { getCookie, deleteCookie } from '@/shared/helpers'
