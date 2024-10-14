@@ -99,6 +99,17 @@ export const registerUser = async (req, res) => {
   }
 }
 
+export const logoutUser = async (req, res) => {
+  console.log('logoutUser')
+  try {
+    res.clearCookie('refreshToken')
+    res.status(200).json({ message: 'Logout successful' })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ message: 'Internal server error' })
+  }
+}
+
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body

@@ -1,8 +1,12 @@
 import { Title, Text, Button, Icon, Divider } from '@/shared/ui'
 import styles from './SpotView.module.scss'
 import { useSpotSchema } from '../useSpotSchema'
+import { userAtom } from '@/features/auth/state'
+import { useAtomValue } from 'jotai'
+
 export const SpotView = ({ data, onEdit, onDelete, onFlyTo, onReturn }) => {
 	const { schema, isSchemaLoaded } = useSpotSchema()
+	const user = useAtomValue(userAtom)
 
 	return (
 		isSchemaLoaded && (
@@ -38,6 +42,7 @@ export const SpotView = ({ data, onEdit, onDelete, onFlyTo, onReturn }) => {
 							simple
 							square
 							onClick={onDelete}
+							disabled={user?.id !== data?.user_id}
 						>
 							<Icon
 								color='var(--error-text)'

@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
 		const clearAuthData = () => {
 			setToken(null)
 			deleteCookie('accessToken')
-			deleteCookie('refreshToken')
 			setIsAuthenticated(false)
 			setUser(null)
 		}

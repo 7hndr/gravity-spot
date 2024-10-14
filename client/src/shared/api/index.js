@@ -26,7 +26,6 @@ api.interceptors.response.use(
 	error => {
 		if (error.response && error.response.status === 401) {
 			deleteCookie('accessToken')
-			// window.location.href = '/entry';
 		}
 
 		return Promise.reject(error)

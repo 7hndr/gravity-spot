@@ -12,15 +12,17 @@ import { POST } from '@/shared/api'
 import { useSetAtom } from 'jotai'
 
 export const Auth = () => {
-	const navigate = useNavigate()
 	const [searchParams, setSearchParams] = useSearchParams()
-	const [isLogin, setIsLogin] = useState(true)
-	const [formModel, setFormModel] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
+	const [formModel, setFormModel] = useState([])
+	const [isLogin, setIsLogin] = useState(true)
 	const [errors, setErrors] = useState({})
+
 	const [formData, setFormData] = useState(initialStateByPurpouse(isLogin))
+
 	const setIsAuthenticated = useSetAtom(isAuthenticatedAtom)
 	const setUser = useSetAtom(userAtom)
+	const navigate = useNavigate()
 
 	const sendNotify = useNotification()
 
@@ -28,8 +30,8 @@ export const Auth = () => {
 
 	useEffect(() => {
 		if (searchParams.has('logout')) {
+			POST('users/logout')
 			deleteCookie('accessToken')
-			deleteCookie('refreshToken')
 			setIsAuthenticated(false)
 			setUser(null)
 			searchParams.delete('logout')
@@ -58,12 +60,8 @@ export const Auth = () => {
 
 	const registerMutation = useMutation({
 		mutationFn: async formData => {
-			const { accessToken, refreshToken, user } = await POST(
-				`users/register`,
-				formData
-			)
+			const { accessToken, user } = await POST(`users/register`, formData)
 			setCookie('accessToken', accessToken, 1)
-			setCookie('refreshToken', refreshToken, 7)
 			setIsAuthenticated(true)
 			setUser(user)
 		},
@@ -130,8 +128,6 @@ export const Auth = () => {
 			} else {
 				registerMutation.mutate(formData)
 			}
-
-			navigate('/')
 		} catch (e) {
 			sendNotify({
 				message: e.message,
