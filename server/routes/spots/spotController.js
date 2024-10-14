@@ -123,11 +123,25 @@ export const createSpot = async (req, res) => {
     res.status(500).send({ message: 'Internal server error' })
   }
 }
+
 export const updateSpot = async (req, res) => {
   try {
+    const imageUrl = req.file
+      ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
+      : req.body.image_url
+
+    const spotData = {
+      name: req.body.name,
+      description: req.body.description,
+      geom: JSON.parse(req.body.geom),
+      user_id: req.body.user_id,
+      address: req.body.address,
+      image_url: imageUrl
+    }
+
     const updatedSpot = await Spot.findOneAndUpdate(
       { _id: req.body.id },
-      { ...req.body },
+      spotData,
       { new: true }
     )
     if (!updatedSpot) {

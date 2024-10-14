@@ -1,14 +1,9 @@
 import multer from 'multer'
 import path from 'path'
-import fs from 'fs'
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = 'uploads/'
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true })
-    }
-    cb(null, uploadDir)
+    cb(null, 'uploads/')
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-${file.originalname}`)
@@ -28,7 +23,7 @@ export const upload = multer({
     if (extname && mimeType) {
       return cb(null, true)
     } else {
-      cb(new Error('Только изображения!'))
+      cb(new Error('Images only!'))
     }
   }
 })

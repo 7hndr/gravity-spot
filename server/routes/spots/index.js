@@ -12,7 +12,7 @@ const router = Router()
 
 router.get('/', getSpots)
 router.post('/', authMiddleware, upload.single('image'), createSpot)
-router.put('/:id', authMiddleware, updateSpot)
+router.put('/:id', authMiddleware, upload.single('image'), updateSpot)
 router.delete('/:id', authMiddleware, deleteSpot)
 
 router.get('/:id', getOneSpot)

@@ -59,7 +59,11 @@ export const useSpotItem = ({ id = null, setIsEditing } = {}) => {
 	})
 
 	const updateSpotMutation = useMutation({
-		mutationFn: data => PUT(`spots/${data.id}`, data),
+		mutationFn: formData => {
+			const id = formData.get('id')
+
+			return PUT(`spots/${id}`, formData)
+		},
 		onSuccess: ({ data, message }) => {
 			sendNotify({
 				type: 'success',
