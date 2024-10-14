@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { Block, Button, Icon, Text } from '@/shared/ui'
 import { FormField } from '@/shared/components/FormField'
 import styles from './SpotForm.module.scss'
@@ -15,6 +15,8 @@ export const SpotForm = ({
 	addSpotMutation,
 	updateSpotMutation
 }) => {
+	const [imageFile, setImageFile] = useState(null)
+	const [imagePreview, setImagePreview] = useState(null)
 	const { pickedPoint, isPickingPoint, pickPointHandler } =
 		useMapPin(initialPoint)
 	const { schema, formData, handleChange, handleSubmit, isLoading } =
@@ -29,7 +31,9 @@ export const SpotForm = ({
 	const { mapgl } = useContext(MapContext)
 
 	const handleSubmitWrapper = e => {
-		handleSubmit(e, () => {})
+		e.preventDefault()
+
+		handleSubmit(e, { formObject: formData, imageFile })
 	}
 
 	const flyToHandler = () => {
@@ -44,84 +48,134 @@ export const SpotForm = ({
 	if (isLoading) return <Loader />
 
 	return (
-		<form
-			onSubmit={handleSubmitWrapper}
-			className={styles.form}
-		>
-			{Object.entries(schema).map(([key, field]) => {
-				if (field.hidden || key === 'id' || field.type === 'Embedded')
-					return null
-
-				return (
-					<FormField
-						key={key}
-						label={`${field.name || key}${
-							field.required ? '*' : ''
-						}`}
-						field={field}
-						disabled={isPickingPoint}
-						value={formData[key] || ''}
-						onChange={handleChange(key)}
-					/>
-				)
-			})}
-			<Button
-				simple
-				onClick={pickPointHandler}
+		<div className={styles.formWrapper}>
+			<form
+				onSubmit={handleSubmitWrapper}
+				className={styles.form}
 			>
-				<Icon name='map-pin' />
-				{isPickingPoint
-					? 'Picking...'
-					: pickedPoint
-					? 'Change location'
-					: 'Pick a point on the map'}
-			</Button>
-			{pickedPoint && (
-				<Block
-					aic
-					col
-					sb
-				>
-					<Text>
-						Picked point:
-						{pickedPoint.coordinates
-							.map(c => c.toFixed(6))
-							.join(', ')}
-					</Text>
-					<Button
-						mini
-						simple
-						square
-						onClick={flyToHandler}
-					>
-						<Icon name='location-crosshairs' />
-					</Button>
-				</Block>
-			)}
-			<div className={styles.formActions}>
-				{handleCancel && (
-					<Button
-						type='button'
-						onClick={handleCancel}
-						simple
-					>
-						Cancel
-					</Button>
-				)}
+				{Object.entries(schema).map(([key, field]) => {
+					if (
+						field.hidden ||
+						key === 'id' ||
+						field.type === 'Embedded'
+					)
+						return null
+
+					return (
+						<FormField
+							key={key}
+							label={`${field.name || key}${
+								field.required ? '*' : ''
+							}`}
+							field={field}
+							disabled={isPickingPoint}
+							value={formData[key] || ''}
+							onChange={handleChange(key)}
+						/>
+					)
+				})}
+				<div className={styles.uploadField}>
+					{!imagePreview ? (
+						<>
+							<label
+								htmlFor='spot-image'
+								className={styles.imageUploadLabel}
+							>
+								<Text type='secondary'>Upload Image here</Text>
+							</label>
+							<input
+								type='file'
+								id='spot-image'
+								accept='image/*'
+								onChange={e => {
+									const file = e.target.files[0]
+									setImageFile(file)
+									setImagePreview(URL.createObjectURL(file))
+								}}
+								className={styles.imageUploadInput}
+							/>
+						</>
+					) : (
+						<>
+							<div className={styles.imagePreview}>
+								<img
+									src={imagePreview}
+									alt='Preview'
+									className={styles.previewImage}
+								/>
+								<Text type='secondary'>{imageFile.name}</Text>
+							</div>
+							<Button
+								onClick={() => {
+									setImageFile(null)
+									setImagePreview(null)
+								}}
+								simple
+							>
+								<Icon name='arrow-rotate-left' />
+								Replace Image
+							</Button>
+						</>
+					)}
+				</div>
 				<Button
-					type='submit'
-					disabled={isLoading || !pickedPoint}
+					simple
+					onClick={pickPointHandler}
 				>
-					<Icon name='plus' />
-					{isEditing
-						? isLoading
-							? 'Updating...'
-							: 'Update spot'
-						: isLoading
-						? 'Adding...'
-						: 'Add a new spot'}
+					<Icon name='map-pin' />
+					{isPickingPoint
+						? 'Picking...'
+						: pickedPoint
+						? 'Change location'
+						: 'Pick a point on the map'}
 				</Button>
-			</div>
-		</form>
+				{pickedPoint && (
+					<Block
+						aic
+						col
+						sb
+					>
+						<Text>
+							Picked point:
+							{pickedPoint.coordinates
+								.map(c => c.toFixed(6))
+								.join(', ')}
+						</Text>
+						<Button
+							mini
+							simple
+							square
+							onClick={flyToHandler}
+						>
+							<Icon name='location-crosshairs' />
+						</Button>
+					</Block>
+				)}
+				<div className={styles.formActions}>
+					{handleCancel && (
+						<Button
+							type='button'
+							onClick={handleCancel}
+							simple
+						>
+							Cancel
+						</Button>
+					)}
+					<Button
+						type='submit'
+						disabled={isLoading || !pickedPoint}
+					>
+						<Icon name='plus' />
+						{isEditing
+							? isLoading
+								? 'Updating...'
+								: 'Update spot'
+							: isLoading
+							? 'Adding...'
+							: 'Add a new spot'}
+					</Button>
+				</div>
+			</form>
+		</div>
 	)
 }

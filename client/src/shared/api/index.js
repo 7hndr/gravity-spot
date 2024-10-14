@@ -1,72 +1,43 @@
+import axios from 'axios'
+import { getCookie, deleteCookie } from '@/shared/helpers'
+
 const VITE_HOST = import.meta.env.VITE_HOST || ''
 const VITE_DEV_HOST = import.meta.env.VITE_DEV_HOST
 const DEV = import.meta.env.DEV
-import { getCookie, deleteCookie } from '@/shared/helpers'
 const BASE_URL = DEV ? `${VITE_DEV_HOST}/api` : `${VITE_HOST}/api`
 
-const getHeaders = () => {
+const api = axios.create({
+	baseURL: BASE_URL,
+	withCredentials: true
+})
+
+api.interceptors.request.use(config => {
 	const token = getCookie('accessToken')
 
-	const headers = {
-		Accept: 'application/json',
-		'Content-Type': 'application/json'
+	if (token) {
+		config.headers.Authorization = `Bearer ${token}`
 	}
 
-	token && (headers.Authorization = `Bearer ${token}`)
+	return config
+})
 
-	return headers
-}
+api.interceptors.response.use(
+	response => response.data,
+	error => {
+		if (error.response && error.response.status === 401) {
+			deleteCookie('accessToken')
+			// window.location.href = '/entry';
+		}
 
-const checkResponse = ({ response, resolve, reject }) => {
-	if (response.status === 401) {
-		deleteCookie('accessToken')
-		// window.location.href = '/entry'
+		return Promise.reject(error)
 	}
+)
 
-	if (response.ok) {
-		resolve(response.json())
-	} else {
-		reject(new Error(response.statusText))
-	}
-}
+export const GET = url => api.get(url)
 
-export const GET = url => {
-	return new Promise((resolve, reject) => {
-		fetch(`${BASE_URL}/${url}`, { method: 'GET', headers: getHeaders() })
-			.then(response => checkResponse({ response, resolve, reject }))
-			.catch(err => reject(err))
-	})
-}
+export const DELETE = url => api.delete(url)
 
-export const DELETE = url => {
-	return new Promise((resolve, reject) => {
-		fetch(`${BASE_URL}/${url}`, { method: 'DELETE', headers: getHeaders() })
-			.then(response => checkResponse({ response, resolve, reject }))
-			.catch(err => reject(err))
-	})
-}
+export const POST = (url, body, headers) =>
+	api.post(url, body, { headers, withCredentials: true })
 
-export const POST = (url, body) => {
-	return new Promise((resolve, reject) => {
-		fetch(`${BASE_URL}/${url}`, {
-			method: 'POST',
-			headers: getHeaders(),
-			body: JSON.stringify(body),
-			credentials: 'include'
-		})
-			.then(response => checkResponse({ response, resolve, reject }))
-			.catch(err => reject(err))
-	})
-}
-
-export const PUT = (url, body) => {
-	return new Promise((resolve, reject) => {
-		fetch(`${BASE_URL}/${url}`, {
-			method: 'PUT',
-			headers: getHeaders(),
-			body: JSON.stringify(body)
-		})
-			.then(response => checkResponse({ response, resolve, reject }))
-			.catch(err => reject(err))
-	})
-}
+export const PUT = (url, body) => api.put(url, body, { withCredentials: true })

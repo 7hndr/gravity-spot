@@ -3,12 +3,12 @@ import { GET, DELETE, POST, PUT } from '@/shared/api'
 import { useNotification } from '@/shared/hooks/useNotify'
 import { useNavigate } from 'react-router-dom'
 
-export const useSpotItem = ({ id, setIsEditing }) => {
+export const useSpotItem = ({ id = null, setIsEditing } = {}) => {
 	const queryClient = useQueryClient()
 	const sendNotify = useNotification()
 	const navigate = useNavigate()
 
-	const addSpot = data => POST('spots', data)
+	const addSpot = formData => POST('spots', formData)
 
 	const { data, isLoading, error, isSuccess, refetch } = useQuery({
 		queryKey: ['spot', id],
@@ -40,13 +40,14 @@ export const useSpotItem = ({ id, setIsEditing }) => {
 
 	const addSpotMutation = useMutation({
 		mutationFn: data => addSpot(data),
-		onSuccess: () => {
+		onSuccess: data => {
 			sendNotify({
 				type: 'success',
 				message: 'Spot added successfully',
 				title: 'Success'
 			})
-			navigate(`/spots/${id}`)
+			queryClient.invalidateQueries(['spots'])
+			navigate(`/spots/${data.id}`)
 		},
 		onError: e => {
 			sendNotify({

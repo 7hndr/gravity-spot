@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import { User } from './model.js'
-dotenv.config({ path: '.env.local' })
+dotenv.config({ path: '.env' })
 
 const JWT_SECRET = process.env.JWT_SECRET
 const REFRESH_SECRET = process.env.REFRESH_SECRET
@@ -106,7 +106,9 @@ export const loginUser = async (req, res) => {
     const user = await User.findOne({ email })
 
     if (!user) {
-      return res.status(400).json({ message: 'Invalid email or password' })
+      return res
+        .status(400)
+        .json({ message: 'User not found. Invalid email or password' })
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password)
@@ -120,7 +122,7 @@ export const loginUser = async (req, res) => {
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: PROD,
-      // sameSite: 'strict',
+      sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000
     })
 

@@ -1,11 +1,61 @@
+.formWrapper {
+	display: grid;
+	grid-gap: 1rem;
+	align-content: start;
+	height: 100%;
+	overflow: hidden;
+}
+
+.uploadField {
+	display: grid;
+	grid-gap: 1rem;
+	background-color: var(--field);
+	border-radius: var(--border-radius);
+	padding: 1rem;
+	height: min-content;
+}
+
 .form {
 	display: grid;
 	grid-gap: 1rem;
 	align-content: start;
+	height: 100%;
+	overflow: auto;
 }
 
 .formActions {
 	display: grid;
 	grid-gap: 1rem;
 	grid-auto-flow: column;
+}
+
+.imageUploadLabel {
+	display: grid;
+	grid-gap: 1rem;
+	padding: 1rem;
+	background-color: var(--field);
+	border-radius: var(--border-radius);
+	border: 2px dashed var(--accent);
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.imageUploadLabel:hover {
+	background-color: var(--hover);
+}
+
+.imageUploadInput {
+	display: none;
+}
+
+.imagePreview {
+	display: grid;
+	grid-gap: 1rem;
+	align-items: center;
+}
+
+.previewImage {
+	width: 100%;
+	border-radius: var(--border-radius);
+	overflow: hidden;
 }

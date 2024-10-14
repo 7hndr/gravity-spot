@@ -1,6 +1,6 @@
 import { Spot } from './model.js'
 
-function getSchemaDescription(schema) {
+const getSchemaDescription = schema => {
   return Object.keys(schema.paths).reduce((description, key) => {
     const path = schema.paths[key]
 
@@ -101,14 +101,29 @@ export const getOneSpot = async (req, res) => {
 
 export const createSpot = async (req, res) => {
   try {
-    await Spot.create({ ...req.body })
-    res.status(201).send({ message: 'Spot created' })
+    const imageUrl = req.file
+      ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
+      : ''
+
+    const spotData = {
+      name: req.body.name,
+      description: req.body.description,
+      geom: JSON.parse(req.body.geom),
+      user_id: req.body.user_id,
+      address: req.body.address,
+      image_url: imageUrl
+    }
+
+    // console.log('spotData', spotData)
+    const newSpot = await Spot.create(spotData)
+    res
+      .status(201)
+      .send({ message: 'Spot created', data: newSpot, id: newSpot._id })
   } catch (e) {
     console.error(e)
     res.status(500).send({ message: 'Internal server error' })
   }
 }
-
 export const updateSpot = async (req, res) => {
   try {
     const updatedSpot = await Spot.findOneAndUpdate(

@@ -39,6 +39,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/api/spots', spotRoutes)
 app.use('/api/schemas', schemasRoutes)
 app.use('/api/users', userRoutes)
+app.use('/uploads', express.static('uploads'))
 
 //  ← — — — — — — — — — — — — {{ 🗲 }} — — — — — — — — — — — — → //
 

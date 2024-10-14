@@ -7,11 +7,11 @@ import {
   getOneSpot
 } from './spotController.js'
 import { authMiddleware } from '../middleware/index.js'
-
+import { upload } from './storage.js'
 const router = Router()
 
 router.get('/', getSpots)
-router.post('/', authMiddleware, createSpot)
+router.post('/', authMiddleware, upload.single('image'), createSpot)
 router.put('/:id', authMiddleware, updateSpot)
 router.delete('/:id', authMiddleware, deleteSpot)
 

@@ -1,6 +1,6 @@
 import { useSetAtom } from 'jotai'
 import { POST } from '@/shared/api'
-import { deleteCookie, getCookie, setCookie } from '@/shared/helpers'
+import { deleteCookie, setCookie } from '@/shared/helpers'
 import { useState, createContext, useEffect, useCallback } from 'react'
 import { isAuthenticatedAtom, userAtom } from './state'
 
@@ -12,8 +12,6 @@ export const AuthProvider = ({ children }) => {
 	const [token, setToken] = useState(null)
 
 	const checkToken = useCallback(async () => {
-		const coockieAccessToken = getCookie('accessToken')
-
 		const clearAuthData = () => {
 			setToken(null)
 			deleteCookie('accessToken')
@@ -22,24 +20,20 @@ export const AuthProvider = ({ children }) => {
 			setUser(null)
 		}
 
-		if (coockieAccessToken) {
-			try {
-				const { accessToken, user } = await POST('users/refresh')
+		try {
+			const { accessToken, user } = await POST('users/refresh')
 
-				if (accessToken && user) {
-					setIsAuthenticated(true)
-					setUser(user)
-					setToken(accessToken)
-					setCookie('accessToken', accessToken)
-				} else {
-					clearAuthData()
-				}
-			} catch (e) {
+			if (accessToken && user) {
+				setIsAuthenticated(true)
+				setUser(user)
+				setToken(accessToken)
+				setCookie('accessToken', accessToken)
+			} else {
 				clearAuthData()
-				throw new Error(e)
 			}
-		} else {
+		} catch (e) {
 			clearAuthData()
+			throw new Error(e)
 		}
 	}, [setIsAuthenticated, setUser])
 

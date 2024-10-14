@@ -39,8 +39,8 @@ export const SpotSchema = mongoose.Schema({
   },
   image_url: {
     name: 'Image link',
-    type: String,
-    required: true
+    type: String
+    // required: true
   },
   created_at: {
     name: 'Created',

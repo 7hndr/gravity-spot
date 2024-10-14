@@ -19,23 +19,45 @@ export const useSpotForm = ({
 		setFormData({ ...formData, [field]: e.target.value })
 	}
 
-	const handleSubmit = (e, callback) => {
+	const getFormDataFromJson = (data, parentKey) => {
+		const formData = new FormData()
+
+		for (let key in data) {
+			if (Object.prototype.hasOwnProperty.call(data, key)) {
+				const fullKey = parentKey ? `${parentKey}[${key}]` : key
+				const value = data[key]
+
+				if (typeof value === 'object' && !(value instanceof File)) {
+					getFormDataFromJson(value, fullKey)
+				} else {
+					formData.append(fullKey, value)
+				}
+			}
+		}
+
+		return formData
+	}
+
+	const handleSubmit = (e, { formObject, imageFile }) => {
 		e.preventDefault()
 
-		const spotData = {
-			...formData,
-			geom: pickedPoint,
+		const formData = getFormDataFromJson({
+			...formObject,
 			user_id: user.id,
-			tag_ids: []
+			geom: JSON.stringify(pickedPoint)
+		})
+
+		if (!user.id) {
+			console.error('User not logged in')
 		}
+
+		formData.append('image', imageFile)
 
 		if (isEditing) {
-			updateSpotMutation.mutate(spotData)
+			updateSpotMutation.mutate(formData)
 		} else {
-			addSpotMutation.mutate(spotData)
+			addSpotMutation.mutate(formData)
 		}
-
-		callback()
 	}
 
 	return {
