@@ -2,15 +2,16 @@ import { redirect } from 'react-router-dom'
 
 import { Root } from '@/shared/layout'
 import {
-	MainPage,
+	DashboardPage,
 	NotFoundPage,
+	SpotListPage,
+	UserListPage,
+	AddSpotPage,
 	EntryPage,
 	UiKitPage,
-	SpotListPage,
-	AddSpotPage,
-	UserPage,
-	UserListPage,
-	SpotPage
+	MainPage,
+	SpotPage,
+	UserPage
 } from '@/pages'
 import { getCookie } from '@/shared/helpers'
 
@@ -66,9 +67,16 @@ export const routeList = [
 				element: <UserPage />
 			},
 			{
+				name: 'Dashboard',
+				path: '/dashboard',
+				loader,
+				element: <DashboardPage />
+			},
+			{
 				name: 'UI kit',
 				path: '/ui-kit',
-				element: <UiKitPage />
+				element: <UiKitPage />,
+				hidden: true
 			},
 			{
 				name: 'Auth',

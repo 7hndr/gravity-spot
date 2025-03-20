@@ -16,6 +16,8 @@ import { NavLink } from 'react-router-dom'
 import { themeAtom } from '@/shared/theme/store'
 import { isAuthenticatedAtom, userAtom } from '@/features/auth/state'
 
+const DEV = import.meta.env.DEV
+
 export const Sidebar = () => {
 	const [isAuthenticated] = useAtom(isAuthenticatedAtom)
 	const [user] = useAtom(userAtom)
@@ -64,13 +66,15 @@ export const Sidebar = () => {
 								label='Night mode'
 							/>
 						</Block>
-						<NavLink
-							to='/ui-kit'
-							className={styles.linkItem}
-						>
-							<Icon name='toolbox' />
-							<Text>UI kit</Text>
-						</NavLink>
+						{DEV && (
+							<NavLink
+								to='/ui-kit'
+								className={styles.linkItem}
+							>
+								<Icon name='toolbox' />
+								<Text>UI kit</Text>
+							</NavLink>
+						)}
 						{location.pathname !== '/entry' && (
 							<>
 								<Divider />

@@ -52,6 +52,12 @@ export const SpotSchema = mongoose.Schema({
     name: 'Address',
     type: String,
     required: true
+  },
+  stars: {
+    name: 'Stars',
+    type: Number,
+    hidden: true,
+    default: 0
   }
 })
 
