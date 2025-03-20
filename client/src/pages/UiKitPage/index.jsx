@@ -187,7 +187,7 @@ export const UiKitPage = () => {
 					<Block>
 						<Input
 							error='Some error'
-							label='With error'
+							label='Wiht error'
 						/>
 					</Block>
 				</Block>
