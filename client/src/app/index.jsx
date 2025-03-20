@@ -1,3 +1,4 @@
+// import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
@@ -10,30 +11,11 @@ import { routeList } from './routes.jsx'
 
 import '@/shared/styles/index.scss'
 
-// eslint-disable-next-line react-refresh/only-export-components
-const DEV = import.meta.env.DEV
-
-const filterHiddenRoutes = routes => {
-	return routes.reduce((acc, route) => {
-		if (!route.hidden || DEV) {
-			if (route.children?.length) {
-				acc.push({
-					...route,
-					children: filterHiddenRoutes(route.children)
-				})
-			} else {
-				acc.push(route)
-			}
-		}
-
-		return acc
-	}, [])
-}
-
-const router = createBrowserRouter(filterHiddenRoutes(routeList))
+const router = createBrowserRouter(routeList)
 const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')).render(
+	// <StrictMode>
 	<ThemeProvider>
 		<AuthProvider>
 			<NotificationProvider>
@@ -43,4 +25,5 @@ createRoot(document.getElementById('root')).render(
 			</NotificationProvider>
 		</AuthProvider>
 	</ThemeProvider>
+	// </StrictMode>
 )
